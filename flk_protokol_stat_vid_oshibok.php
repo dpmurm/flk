@@ -58,7 +58,7 @@ if (isset($_GET['period_stop'])) {
     </tr>
     <?php
 
-    include_once("ConnectFlkEGRN.php");
+    include_once("config.php");
 
     $query = "select  
 (case 

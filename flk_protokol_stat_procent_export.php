@@ -52,7 +52,7 @@ if (isset($_GET['period_stop'])) {
     </tr>
     <?php
 
-    include_once("ConnectFlkEGRN.php");
+    include_once("config.php");
 
     $query = "select sp.type_object, (sp.pass+sp.nopass) as forpass, sp.pass, sp.nopass, (sp.pass/(sp.pass+sp.nopass))*100 as protsent
 from

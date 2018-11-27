@@ -56,7 +56,7 @@ if (isset($_GET['period_stop'])) {
     </tr>
     <?php
 
-    include_once("ConnectFlkEGRN.php");
+    include_once("config.php");
 
     $query = "select rl.id,
 substr(rl.cad_obj_num, 4, 2) rayon,

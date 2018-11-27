@@ -26,7 +26,7 @@ if (isset($_GET['protokol_id'])) {
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <?php
 
-    include_once("ConnectFlkEGRN.php");
+    include_once("config.php");
 
     $query = "select 
 rl.id,

@@ -16,7 +16,7 @@ if (!empty($_GET)) {
         $reg_no = '';
         $text = 0;
 
-        include_once("ConnectFlkEGRN.php");
+        include_once("config.php");
 
         if (!get_magic_quotes_gpc()) {
             $record_list_id = $_GET['record_list_id'];

@@ -54,7 +54,7 @@ if (isset($_GET['period_stop'])) {
     </tr>
     <?php
 
-    include_once("ConnectFlkEGRN.php");
+    include_once("config.php");
 
     $query = "select  
 kr.otdel_name, CONCAT(kr.name,' (',substr(rl.cad_obj_num,4,2),')') as rayon, 
