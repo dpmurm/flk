@@ -1,25 +1,27 @@
 <?php
+
 //use yii\helpers\Url;
 //use yii\helpers\Html;
 //use frontend\models\Protokolexport;
 
 /* @var $this yii\web\View */
-$this->title = 'Протоколы ФЛК исходящей выгрузки в ФНС';
-$this->params['breadcrumbs'][] = $this->title;
+$title = 'Протоколы ФЛК исходящей выгрузки в ФНС';
+//$params['breadcrumbs'][] = $title;
 
 
-$sql = 'Select * from protokol_export
+$query = 'Select * from protokol_export
         order by Year, number desc
         ';
-$model = Protokolexport::findbysql($sql)->all();
+//$model = Protokolexport::findbysql($sql)->all();
+include_once("config.php");
 
 ?>
 <div class="flk-export">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= $title; ?></h1>
 
     <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных в ФНС для организации процесса
         исправления ошибок путем внесения отметок об их исправлении.<br>
-        Также доступна <a href="<?php echo Url::toRoute(['site/page', 'view' => 'flk_export_stat']); ?>">статистика по протоколам ФЛК</a>
+        Также доступна <a href="index_stat.php">статистика по протоколам ФЛК</a>
     </p>
     <?php
 
@@ -37,29 +39,27 @@ $model = Protokolexport::findbysql($sql)->all();
     echo '<th>' . ' ' . '</th>';
     echo '</tr></thead><tbody>';
 
-    // while ($model=Protokolexport::findbysql($sql)->all()) {
 
-    //$k=$k+1;
-    // print '<td>'.($k).'</td>';
-    foreach ($model as $item) {
-        print '<tr>';
-        //print '<td>'.($item->id).'</td>';
-        echo '<td><a href="'.Url::base().'/scripts/flk_protokol_records.php?protokol_id='.$item->id.'&number='.$item->number.'&year='.$item->Year.'&period_start='.$item->period_start.'&period_stop='.$item->period_stop.'">
-             Открыть</a></td>';
-        print '<td>' . ($item->number) . '</td>';
-        print '<td>' . ($item->date) . '</td>';
-        print '<td>' . ($item->Year) . '</td>';
-        print '<td>' . ($item->period_start) . '</td>';
-        print '<td>' . ($item->period_stop) . '</td>';
+    if ($result = mysqli_query($link, $query)) {
+                                                $k = 0;
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                $k = $k + 1;
+                                                ?>
+        <tr>
 
-        //print '<td>' . ($item->date_update) . '</td>';
-        echo '<td><a href="'.Url::base().'/scripts/flk_protokol_records_xls.php?protokol_id='.$item->id.'&number='.$item->number.'&year='.$item->Year.'&period_start='.$item->period_start.'&period_stop='.$item->period_stop.'">
-             Скачать в EXCEL</a></td>';
-        print '</tr>';
-
+       <td><a href="flk_protokol_records.php?protokol_id=<?= $row['id']?>&number=<?= $row['number']?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a></td>
+        <td> <?= $row['number']?></td>
+        <td><?= $row['date'] ?></td>
+        <td> <?= $row['Year'] ?></td>
+        <td><?= $row['period_start'] ?></td>
+        <td><?= $row['period_stop'] ?></td>
+       <td><a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id']?>&number=<?= $row['number']?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать в EXCEL</a></td>
+        </tr>
+         <?php
+                                            }
     }
-
-    //}
+    mysqli_free_result($result);
+    mysqli_close($link);
 
     print '</tbody></table>';
 
