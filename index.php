@@ -1,3 +1,15 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title>Протоколы ФЛК исходящей выгрузки в ФНС</title>
+</head>
+<body>
+
 <?php
 
 $title = 'Протоколы ФЛК исходящей выгрузки в ФНС';
@@ -14,49 +26,50 @@ include_once("config.php");
         исправления ошибок путем внесения отметок об их исправлении.<br>
         Также доступна <a href="index_stat.php">статистика по протоколам ФЛК</a>
     </p>
-    <?php
 
-    print '<table class="table table-hover">';
-    echo '<thead class="thead-inverse"><tr>';
-    //echo '<td>id</td>';
-    echo '<th>' . ' ' . '</th>';
-    echo '<th>' . '№ протокола' . '</th>';
-    echo '<th>' . 'Дата формирования выгрузки' . '</th>';
-    echo '<th>' . 'Год' . '</th>';
-    echo '<th>' . 'Начало периода' . '</th>';
-    echo '<th>' . 'Конец периода' . '</th>';
+    <table class="table table-hover">
+        <thead class="thead-inverse">
+        <tr>
+            <th></th>
+            <th>№ протокола</th>
+            <th>Дата формирования выгрузки</th>
+            <th>Начало периода</th>
+            <th>Конец периода</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
 
-    //echo '<th>' . 'Дата обновления выгрузки' . '</th>';
-    echo '<th>' . ' ' . '</th>';
-    echo '</tr></thead><tbody>';
+        <?php
+        if ($result = mysqli_query($link, $query)) {
+            $k = 0;
+            while ($row = mysqli_fetch_assoc($result)) {
+                $k = $k + 1;
+                ?>
+                <tr>
 
-
-    if ($result = mysqli_query($link, $query)) {
-        $k = 0;
-        while ($row = mysqli_fetch_assoc($result)) {
-            $k = $k + 1;
-            ?>
-            <tr>
-
-                <td>
-                    <a href="flk_protokol_records.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a>
-                </td>
-                <td><?= $row['number'] ?></td>
-                <td><?= $row['date'] ?></td>
-                <td><?= $row['Year'] ?></td>
-                <td><?= $row['period_start'] ?></td>
-                <td><?= $row['period_stop'] ?></td>
-                <td>
-                    <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать в EXCEL</a>
-                </td>
-            </tr>
-            <?php
+                    <td>
+                        <a href="flk_protokol_records.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a>
+                    </td>
+                    <td><?= $row['number'] ?></td>
+                    <td><?= $row['date'] ?></td>
+                    <td><?= $row['Year'] ?></td>
+                    <td><?= $row['period_start'] ?></td>
+                    <td><?= $row['period_stop'] ?></td>
+                    <td>
+                        <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
+                            в EXCEL</a>
+                    </td>
+                </tr>
+                <?php
+            }
         }
-    }
-    mysqli_free_result($result);
-    mysqli_close($link);
-
-    print '</tbody></table>';
-    print '</table>';
-    ?>
+        mysqli_free_result($result);
+        mysqli_close($link);
+        ?>
+        </tbody>
+    </table>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
