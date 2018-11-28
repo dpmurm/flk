@@ -37,6 +37,7 @@ if (isset($_GET['period_stop'])) {
    <!-- <h2><font color=red>Протокол передачи сведений в ФНС <?=$year?> года номер <?=$number?> за период с <?=$period_start?> по <?=$period_stop?></font></h2>-->
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <tr>
+        <th >Решение</th>
         <th >№ пп</th>
         <th >Район</th>
         <th >Кадастровый№</th>
