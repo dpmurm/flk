@@ -16,3 +16,19 @@ https://mariadb.com/kb/en/library/toad-for-mysql-80/
 - index_stat.php    статистика по протоколам
 
 Проект обновляется, следите за закладкой COMMITS
+
+**Скриншоты работы системы**
+
+![](pict\index.png)
+
+![](pict\index_stat.png)
+
+![](pict\procent.png)
+
+![](pict\hod.png)
+
+![](pict\vid_osh.png)
+
+![](pict\list_records.png)
+
+![](pict\record_work.png)

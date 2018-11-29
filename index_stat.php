@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Статистика по протоколам ФЛК исходящей выгрузки в ФНС</title>
+    <title>Статистика по протоколам ФЛК исходящей выгрузки</title>
 </head>
 <body>
 <?php
-$title = 'Статистика по протоколам ФЛК исходящей выгрузки в ФНС';
+$title = 'Статистика по протоколам ФЛК исходящей выгрузки';
 
 $query = 'Select * from protokol_export
         order by Year, number desc
@@ -19,7 +19,7 @@ include_once("config.php");
 ?>
 <div class="flk-export">
     <h1><?= $title; ?></h1>
-    <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных в ФНС для организации процесса
+    <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных для организации процесса
         исправления ошибок путем внесения отметок об их исправлении.<br>
         Перейти к <a href="index.php">протоколам ФЛК</a> для исправления ошибок.
     </p>
