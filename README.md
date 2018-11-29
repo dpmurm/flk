@@ -19,16 +19,16 @@ https://mariadb.com/kb/en/library/toad-for-mysql-80/
 
 **Скриншоты работы системы**
 
-![](pict\index.jpg)
+![](/pict/index.jpg)
 
-![](pict\index_stat.jpg)
+![](/pict/index_stat.jpg)
 
-![](pict\procent.jpg)
+![](/pict/procent.jpg)
 
-![](pict\hod.jpg)
+![](/pict/hod.jpg)
 
-![](pict\vid_osh.jpg)
+![](/pict/vid_osh.jpg)
 
-![](pict\list_records.jpg)
+![](/pict/list_records.jpg)
 
-![](pict\record_work.jpg)
+![](/pict/record_work.jpg)
