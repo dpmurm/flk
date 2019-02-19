@@ -13,7 +13,7 @@
 $title = 'Статистика по протоколам ФЛК исходящей выгрузки';
 
 $query = 'Select * from protokol_export
-        order by Year, number desc
+        order by Year desc, number desc
         ';
 include_once("config.php");
 ?>
@@ -55,10 +55,10 @@ include_once("config.php");
                         <a href="flk_protokol_stat_vid_oshibok.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">виды ошибок</a>
                     </td>
                     <td> <?= $row['number'] ?> </td>
-                    <td> <?= $row['date'] ?></td>
+                    <td> <?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
                     <td> <?= $row['Year'] ?> </td>
-                    <td> <?= $row['period_start'] ?> </td>
-                    <td> <?= $row['period_stop'] ?> </td>
+                    <td> <?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?> </td>
+                    <td> <?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?> </td>
                 </tr>
                 <?php
             }

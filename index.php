@@ -15,7 +15,7 @@
 $title = 'Протоколы ФЛК исходящей выгрузки';
 
 $query = 'Select * from protokol_export
-        order by Year, number desc
+        order by Year desc, number desc
         ';
 include_once("config.php");
 ?>
@@ -33,6 +33,7 @@ include_once("config.php");
             <th></th>
             <th>№ протокола</th>
             <th>Дата формирования выгрузки</th>
+            <th>Год</th>
             <th>Начало периода</th>
             <th>Конец периода</th>
             <th></th>
@@ -52,10 +53,10 @@ include_once("config.php");
                         <a href="flk_protokol_records.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a>
                     </td>
                     <td><?= $row['number'] ?></td>
-                    <td><?= $row['date'] ?></td>
-                    <td><?= $row['Year'] ?></td>
-                    <td><?= $row['period_start'] ?></td>
-                    <td><?= $row['period_stop'] ?></td>
+                    <td><?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
+                    <td><?= $row['Year']; ?></td>
+                    <td><?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?></td>
+                    <td><?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?></td>
                     <td>
                         <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
                             в EXCEL</a>
