@@ -1,0 +1,25 @@
+div.main {
+padding:0px;
+margin:0px;
+min-height: calc(100vh - 100px);
+}
+
+div.center {
+position: relative;
+text-align: center;
+}
+
+div.pagination {
+bottom: 0px;
+display: inline-block;
+background: #ffffff;
+padding: 5px;
+padding-left: 8px;
+padding-right: 8px;
+border: 0px solid #bcbcbc;
+border-radius: 5px 5px 5px 5px;
+margin: 10px;
+margin-top: 15px;
+font-size: 14px;
+text-align: center;
+}

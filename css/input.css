@@ -1,0 +1,129 @@
+input, button {
+color: inherit;
+position: relative;
+vertical-align: middle;
+font-size: inherit;
+font-family: inherit;
+font-weight: inherit;
+}
+
+input.button, button.button {
+background: #fff; 
+height: 28px;
+border: 1px solid #bcbcbc;
+border-radius: 3px 3px 3px 3px;
+padding: 3px;
+text-align: center;
+cursor: pointer;
+}
+
+input.button:hover, input.date:hover, button.button:hover {
+border-color: #337ab7;
+/*box-shadow: 0px 0px 2px 0px #337ab7;*/
+}
+
+input.button.fileupload{
+width: 98%;
+height: 21px;
+text-align: left;
+}
+
+input.w100pt, button.w100pt {
+width: 100%;
+}
+
+input.w20h20, button.w20h20 {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+font-size: 10px;
+padding: 0px;
+}
+
+input.w30h30, button.w30h30 {
+width: 30px;
+height: 30px;
+border-radius: 50%;
+}
+
+input.number {
+-moz-appearance: textfield;
+height: 30px;
+padding: 2px;
+border: 1px solid #bcbcbc;
+text-align: left;
+vertical-align: center;
+border-radius: 3px 3px 3px 3px;
+}
+
+input.number.w40 {
+width: 40px; 
+}
+
+input.number.w50 {
+width: 50px; 
+}
+
+input.number.w55 {
+width: 55px; 
+}
+
+input.date {
+padding: 2px;
+height: 22px;
+border: 1px solid #bcbcbc;
+border-radius: 3px 3px 3px 3px;
+}
+
+input.date.w120 {
+width: 120px; 
+}
+
+input.date.w130 {
+width: 130px; 
+}
+
+.checkbox {
+position: absolute;
+z-index: -1;
+opacity: 0;
+}
+.checkbox + label {
+position: relative;
+cursor: pointer;
+}
+.checkbox + label:before {
+content: '';
+position: relative;
+display: inline-block;
+left: -3px;
+width: 22px;
+height: 22px;
+border: 1px solid #cdcdcd;
+border-radius: 50%;
+background: #FFF;
+}
+.checkbox + label:after {
+content: '';
+position: absolute;
+top: -8px;
+left: 0px;
+width: 14px;
+height: 14px;
+border-radius: 50%;
+border: 2px solid #337ab7;
+background: #fff;
+opacity: 0;
+/*transition: .2s;*/
+}
+.checkbox:checked + label:after {
+opacity: 1;
+}
+
+textarea {
+background: #fff; 
+border: inherit;
+border-radius: 3px 3px 3px 3px;
+padding: 3px;
+}
+

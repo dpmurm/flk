@@ -31,10 +31,10 @@ include_once("config.php");
             <th></th>
             <th></th>
             <th>№ протокола</th>
-            <th>Дата формирования выгрузки</th>
-            <th>Год</th>
+            <th>Дата создания</th>
             <th>Начало периода</th>
             <th>Конец периода</th>
+            <th>Год</th>
         </tr>
         </thead>
         <tbody>
@@ -56,9 +56,9 @@ include_once("config.php");
                     </td>
                     <td> <?= $row['number'] ?> </td>
                     <td> <?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
-                    <td> <?= $row['Year'] ?> </td>
                     <td> <?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?> </td>
                     <td> <?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?> </td>
+                    <td> <?= $row['Year'] ?> </td>
                 </tr>
                 <?php
             }

@@ -1,0 +1,28 @@
+select {
+color: inherit;
+position: relative;
+vertical-align: middle;
+font-size: inherit;
+font-family: inherit;
+font-weight: inherit;
+}
+
+select.main {
+height: 28px;
+padding: 2px;
+border: 1px solid #bcbcbc;
+border-radius: 3px 3px 3px 3px;
+cursor: pointer;
+}
+
+select:hover {
+border-color: #337ab7;
+/* box-shadow: 0px 0px 2px 0px #337ab7; */
+}
+
+select.noarrow {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none; 
+}
+

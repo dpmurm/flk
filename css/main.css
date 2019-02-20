@@ -1,0 +1,58 @@
+body {
+background: #fff;
+color: #444;
+font-size: 14px;
+font-family: sans-serif;
+}
+
+h1 {
+font-size: 34px
+}
+
+h2 {
+font-size: 28px
+}
+
+h3 {
+font-size: 23px
+}
+
+h1, h2, h3 {
+margin-top: 20px;
+margin-bottom: 10px;
+font-weight: 500;
+line-height: 1.1;
+color: #333;
+}
+
+a {
+color: #337ab7;
+text-decoration: none;
+}
+
+a:hover {
+text-decoration: underline;
+}
+
+.center {
+text-align: center;
+}
+
+.left {
+text-align: left;
+}
+
+.right {
+text-align: right;
+}
+
+.tbl-header {
+	background-color: rgba(255,255,255,0.3);
+}
+.tbl-content {
+	height:300px;
+	overflow-x:auto;
+	margin-top: 0px;
+	border: 1px solid rgba(255,255,255,0.3);
+}
+

@@ -32,10 +32,10 @@ include_once("config.php");
         <tr>
             <th></th>
             <th>№ протокола</th>
-            <th>Дата формирования выгрузки</th>
-            <th>Год</th>
+            <th>Дата создания</th>
             <th>Начало периода</th>
             <th>Конец периода</th>
+            <th>Год</th>
             <th></th>
         </tr>
         </thead>
@@ -54,9 +54,9 @@ include_once("config.php");
                     </td>
                     <td><?= $row['number'] ?></td>
                     <td><?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
-                    <td><?= $row['Year']; ?></td>
                     <td><?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?></td>
                     <td><?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?></td>
+                    <td><?= $row['Year']; ?></td>
                     <td>
                         <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
                             в EXCEL</a>

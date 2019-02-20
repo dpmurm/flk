@@ -1,0 +1,79 @@
+table {
+background: #fff;
+width: 99%;
+border-collapse: collapse;
+}
+
+table, th, td {
+border-color: #cdcdcd;
+border-style: solid;
+border-width: 1px 1px 1px 1px; 
+padding: 5px;
+word-wrap: break-word;
+}
+
+tr.hover:hover td {
+background: #f7f7f7;
+}
+
+table.main {
+border-width: 0px 0px 1px 0px; 
+line-height: 20px;
+font-size: 14px;
+color: #444;
+}
+
+thead.main {
+border-bottom: 2px solid #dedede; 
+vertical-align: bottom;
+}
+
+th.main {
+text-align: left;
+font-weight: bold;
+padding: 5px;
+padding-top: 10px;
+padding-bottom: 10px;
+vertical-align: middle;
+}
+
+td.main {
+padding: 5px;
+padding-top: 8px;
+padding-bottom: 8px;
+vertical-align: middle;
+}
+
+td.main.min_v1, th.main.min_v1{
+min-width: 100px;
+}
+
+td.main.min_v2, th.main.min_v2{
+min-width: 120px;
+}
+
+td.main.max_v1, th.main.max_v1{
+width: 120px;
+min-width: 150px;
+}
+
+td.filelst {
+width: 280px;
+min-width: 280px;
+max-width: 280px;
+font-size: 12px;
+}
+
+td.main, th.main {
+border-width: 0px 0px 1px 0px; 
+}
+
+table.nobrd, td.nobrd, th.nobrd {
+border-width: 0px 0px 0px 0px; 
+}
+
+/*
+tr.main:nth-child(even) {
+background: #f9f9f9; 
+}
+*/
