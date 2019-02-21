@@ -7,7 +7,8 @@ require_once("functions/fn_protokol_upload.php");
 require_once("functions/fn_misc.php");
 require_once("functions/fn_pagination.php");
 // подключаем библиотеку для парсинга xls
-require_once $doc_root."PHPExcel/Classes/PHPExcel.php";
+//require_once $doc_root."PHPExcel/Classes/PHPExcel.php";
+require_once "PHPExcel/PHPExcel.php";
 
 if (isset($_POST['date'])) 
 {

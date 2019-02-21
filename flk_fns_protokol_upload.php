@@ -171,10 +171,10 @@ $query = 'SELECT pef.id,
 			pe.date, 
 			pe.period_start, 
 			pe.period_stop, 
-			pe.type_unloading
+			pe.type
 		FROM protokol_export_fns pef 
-		LEFT JOIN protokol_export pe ON pef.protokol_uid=pe.protokol_uid '.$s_where.'
-		ORDER BY id DESC LIMIT '.$on_page.' OFFSET '.$start_from.'';
+		LEFT JOIN protokol_export pe ON pef.protokol_uid=pe.id ' .$s_where. '
+		ORDER BY id DESC LIMIT ' .$on_page. ' OFFSET ' .$start_from ;
 
 echo '
 <div class="main">
@@ -294,7 +294,7 @@ elseif(isset($_GET['rabbit_hole']) && $_GET['rabbit_hole'] == "1"){
 		</td>
 		</form>
 	</tr>
-	<table>
+	</table>
 
 <br>	
 	<table class="main">

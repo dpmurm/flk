@@ -23,14 +23,14 @@ $query = 'SELECT MAX(pef.id) AS id,
 			MAX(pef.insert_date) AS insert_date, 
 			pe.period_start AS period_start, 
 			pe.period_stop AS period_stop, 
-			pe.type_unloading AS type_unloading, 
-			pe.protokol_uid AS protokol_uid 
+			pe.type AS type_unloading, 
+			pe.id AS protokol_uid 
 			FROM protokol_export_fns pef 
-			left join protokol_export pe on pef.protokol_uid=pe.protokol_uid
+			left join protokol_export pe on pef.protokol_uid=pe.id
 			GROUP BY pe.date, 
 				pe.period_start, 
 				pe.period_stop, 
-				pe.type_unloading
+				pe.type
 			ORDER BY id DESC';
 ?>
 <div>
@@ -46,7 +46,7 @@ $query = 'SELECT MAX(pef.id) AS id,
 		<tr class="main">
 			<th class="main min_v1 max_v1">
 			<?php
-			// показываем ссылку на загрузку протоколов, если наш ip в списке разрешенных
+			 //показываем ссылку на загрузку протоколов, если наш ip в списке разрешенных
 			if (in_array("$ipaddr", $arr_ip_allow)){
 				echo '<a href="flk_fns_protokol_upload.php">Загрузить</a>';
 			}
@@ -93,7 +93,7 @@ $query = 'SELECT MAX(pef.id) AS id,
 				
 				// сопоставляем идентификаторы типов выгрузки читаемым именам
 				foreach ($arr_type_unloading as $id_type_unloading => $name_type_unloading){
-					if ($row['type_unloading'] == $id_type_unloading){break;}
+					if ($row['type'] == $id_type_unloading){break;}
 					else $name_type_unloading = "unknown";
 				}
 				echo '<tr class="hover">

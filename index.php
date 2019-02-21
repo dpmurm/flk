@@ -1,3 +1,7 @@
+<?
+require_once("config.php");
+session_start();
+?>
 <!doctype html>
 <html lang="ru">
 <head>
@@ -11,7 +15,8 @@
 <body>
 
 <?php
-
+$ipaddr = $_SERVER['REMOTE_ADDR'];
+require_once("matching.php");
 $title = 'Протоколы ФЛК исходящей выгрузки';
 
 $query = 'Select * from protokol_export
@@ -30,7 +35,14 @@ include_once("config.php");
     <table class="table table-hover">
         <thead class="thead-inverse">
         <tr>
-            <th></th>
+            <th class="main min_v1 max_v1">
+                <?php
+                // показываем ссылку на загрузку протоколов, если наш ip в списке разрешенных
+                if (in_array("$ipaddr", $arr_ip_allow)){
+                    echo '<a href="flk_protokol_upload.php">Загрузить</a>';
+                }
+                ?>
+            </th>
             <th>№ протокола</th>
             <th>Дата создания</th>
             <th>Начало периода</th>
