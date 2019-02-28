@@ -32,19 +32,19 @@ if (isset($_GET['period_stop'])) {
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Процент прохождения сведений в ФНС по документам</title>
+    <title>Процент прохождения сведений в ФНС по объектам</title>
 </head>
 
 <body>
 
-<h2><font color=red>Процент прохождения сведений в ФНС по документам по протоколу от <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
+<h2><font color=red>Процент прохождения сведений в ФНС по объектам по протоколу от <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
 
 
 <table width="60%" border="1" cellspacing="0" cellpadding="0">
     <tr>
 
         <th>Вид объекта</th>
-        <th>Документов для выгрузки</th>
+        <th>Объектов для выгрузки</th>
         <th>Выгружено</th>
         <th>Не прошли ФЛК</th>
         <th>Процент прохождения</th>
@@ -54,29 +54,39 @@ if (isset($_GET['period_stop'])) {
 
     include_once("config.php");
 
-    $query = "select sp.type_object, (sp.pass+sp.nopass) as forpass, sp.pass, sp.nopass, (sp.pass/(sp.pass+sp.nopass))*100 as protsent
+    $query = "
+    select sp.type_object, (sp.pass+sp.nopass) as forpass, sp.pass, sp.nopass, (sp.pass/(sp.pass+sp.nopass))*100 as protsent
 from
  (
-select  rl.type_object ,  sum( IF (rl.status = 'Прошел флк', 1, 0) ) AS pass, sum(IF (rl.status = 'Не прошел флк', 1, 0)) AS nopass
+select sp1.type_object , sum( IF (sp1.status = 'Прошел флк', 1, 0) ) AS pass, sum(IF (sp1.status = 'Не прошел флк', 1, 0)) AS nopass 
+from
+(
+select distinct  rl.type_object ,rl.cad_obj_num,  rl.status
 from record_list rl,
      protokol_file pf,
      protokol_export pe
 where rl.file_name_id=pf.id    
 and pf.protokol_id=pe.id
 and pe.id=$protokol_id
-group by  rl.type_object
+) as sp1
+group by  sp1.type_object
 union
-select  'Всего' , sum( IF (rl.status = 'Прошел флк', 1, 0) ) AS pass, sum(IF (rl.status = 'Не прошел флк', 1, 0)) AS nopass
+select \"Всего\" as name , sum( IF (sp2.status = 'Прошел флк', 1, 0) ) AS pass, sum(IF (sp2.status = 'Не прошел флк', 1, 0)) AS nopass
+from
+(
+select distinct  rl.type_object ,rl.cad_obj_num,rl.status
 from record_list rl,
      protokol_file pf,
      protokol_export pe
 where rl.file_name_id=pf.id    
 and pf.protokol_id=pe.id
 and pe.id=$protokol_id
-group by  'Всего'
+) as sp2
+group by  \"Всего\"
 ) as sp
 
-order by 1 desc";
+order by 1 desc
+    ";
     //echo $query;
 
     if ($result = mysqli_query($link, $query)) {
