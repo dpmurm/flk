@@ -49,7 +49,7 @@ if (isset($_POST['type_unloading'])) {
 } else {
     $type_unloading = "0";
 }
-
+// Фильтр Признак применения
 if (isset($_GET['search_period_submit'])) {
     $search_period_submit = $_SESSION['fpu']['search_period_submit'] = $_GET['search_period_submit'];
 } elseif (isset($_SESSION['fpu']['search_period_submit'])) {
@@ -57,7 +57,7 @@ if (isset($_GET['search_period_submit'])) {
 } else {
     $search_period_submit = "0";
 }
-
+// Фильтр Начало периода
 if (isset($_GET['s_period_start']) and $search_period_submit == "1") {
     $s_period_start = $_SESSION['fpu']['s_period_start'] = $_GET['s_period_start'];
 } elseif (isset($_SESSION['fpu']['s_period_start']) and $search_period_submit == "1") {
@@ -65,7 +65,7 @@ if (isset($_GET['s_period_start']) and $search_period_submit == "1") {
 } else {
     $s_period_start = "";
 }
-
+// Фильтр Конец периода
 if (isset($_GET['s_period_stop']) and $search_period_submit == "1") {
     $s_period_stop = $_SESSION['fpu']['s_period_stop'] = $_GET['s_period_stop'];
 } elseif (isset($_SESSION['fpu']['s_period_stop']) and $search_period_submit == "1") {
@@ -73,7 +73,7 @@ if (isset($_GET['s_period_stop']) and $search_period_submit == "1") {
 } else {
     $s_period_stop = "";
 }
-
+// Фильтр Тип выгрузки
 if (isset($_GET['s_type_unloading']) and $search_period_submit == "1") {
     $s_type_unloading = $_SESSION['fpu']['s_type_unloading'] = $_GET['s_type_unloading'];
 } elseif (isset($_SESSION['fpu']['s_type_unloading']) and $search_period_submit == "1") {
@@ -151,6 +151,9 @@ if ($search_period_submit == "1") {
     unset($_SESSION['fpu']['s_period_start']);
     unset($_SESSION['fpu']['s_period_stop']);
     unset($_SESSION['fpu']['s_type_unloading']);
+    $s_where = "";
+    $f_string = "";
+    $f_tu_string = "";
 }
 /* === FILTER END === */
 
