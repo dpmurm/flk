@@ -17,6 +17,10 @@ if (isset($_GET['protokol_id'])) {
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/input.css">
+    <link rel="stylesheet" href="css/select.css">
     <title>Запись протокола ФЛК</title>
 </head>
 
@@ -27,6 +31,12 @@ if (isset($_GET['protokol_id'])) {
     <?php
 
     include_once("config.php");
+    require_once("functions/fn_records_note_form.php");
+
+    if(isset($_GET['records_note_submit']) && $_GET['records_note_submit'] == "save")
+    {flk_records_note_form_insert($link);}
+    elseif(isset($_GET['records_note_cancel']) && $_GET['records_note_cancel'] == "cancel")
+    {flk_records_note_form_cancel($link);}
 
     $query = "select 
 rl.id,
@@ -66,7 +76,7 @@ order by 2, 4";
 </table>
 
 <h2><font color=green>Информация об исправлении ошибки ФЛК</font></h2>
-<form action="flk_records_note_form_insert.php" method="get">
+<form name="records_note" action="?" method="get">
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <?php
 
@@ -101,7 +111,9 @@ rn.record_list_id=$record_list_id";
 </table>
     <input type="hidden" name="protokol_id" value="<?=$protokol_id?>" />
     <input type="hidden" name="record_list_id" value="<?=$record_list_id?>" />
-    <input name="Submit" type="submit" id="Submit" value="Сохранить" />
+
+    <br><button class="button" name="records_note_submit" type="submit" value="save">Сохранить</button>&#160;
+    <button class="button" name="records_note_cancel" type="submit" value="cancel">Отмена</button>
 </form>
 
 </body>
