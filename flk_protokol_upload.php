@@ -10,6 +10,14 @@ require_once("functions/fn_pagination.php");
 //require_once $doc_root."PHPExcel/Classes/PHPExcel.php";
 require_once "PHPExcel/PHPExcel.php";
 
+if (isset($_POST['number'])) {
+    $vid_object = $_SESSION['fpu']['number'] = $_POST['number'];
+} elseif (isset($_SESSION['fpu']['number'])) {
+    $vid_object = $_SESSION['fpu']['number'];
+} else {
+    $number = 0;
+}
+
 if (isset($_POST['date'])) {
     $date = $_SESSION['fpu']['date'] = $_POST['date'];
 } elseif (isset($_SESSION['fpu']['date'])) {
@@ -161,18 +169,20 @@ if ($search_period_submit == "1") {
 // Количество записей на странице
 $on_page = "15";
 
-$query_count_pages = 'SELECT COUNT(id) AS count FROM `protokol_export` ' . $s_where;
+$query_count_pages = 'SELECT COUNT(id) AS count FROM `protokol_file` ' . $s_where;
 $arr_count_pages = fn_count_pages($link, $on_page, $query_count_pages);
 $on_page = $arr_count_pages['on_page'];
 $num_pages = $arr_count_pages['num_pages'];
 $current_page = $arr_count_pages['current_page'];
 $start_from = $arr_count_pages['start_from'];
 /* === PAGE COUNTING END === */
+echo $s_where;
 
 $query = 'SELECT 
             -- id,
 			-- insert_date,
 			pf.id,
+			pe.number,
 			date,
 			period_start,
 			period_stop,
@@ -200,10 +210,10 @@ echo '
 	<table class="nobrd" style="width: 30%">
 	<tr>
 		<th class="main nobrd">
-		Начало периода
+		Начало периода (YYYY-MM-DD)
 		</th>
 		<th class="main nobrd">
-		Конец периода
+		Конец периода (YYYY-MM-DD)
 		</th>
 		<th class="main nobrd">
 		Тип выгрузки
@@ -290,6 +300,7 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
         <!--
         <th class="main">G</th>
         -->
+        <th class="main">Номер</th>
         <th class="main">Дата выгрузки</th>
         <th class="main">Начало периода</th>
         <th class="main">Конец периода</th>
@@ -304,6 +315,10 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
             <!--
             <th class="main"></th>
             -->
+            <th class="main">
+                <input required type="date" class="date w130" name="number"
+                       value="<?= $number; ?>"/>
+            </th>
             <th class="main">
                 <input required type="date" class="date w130" name="date" max="<?= $curr_date; ?>"
                        value="<?= $date; ?>"/>
@@ -424,6 +439,7 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
 					<label for="checkbox' . $k . '"  title="Если протокол отмечен, при его удалении будут удалены все протоколы этой выгрузки"></label>
 					</td>
 					-->
+					<td class="main">' . $row['number'] . '</td>
 					<td class="main">' . $date . '</td>
 					<td class="main">' . $period_start . '</td>
 					<td class="main">' . $period_stop . '</td>
