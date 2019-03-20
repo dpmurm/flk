@@ -2,7 +2,7 @@
 -- Хост:                         10.51.118.210
 -- Версия сервера:               5.5.50-MariaDB - mariadb.org binary distribution
 -- Операционная система:         Win64
--- HeidiSQL Версия:              9.5.0.5196
+-- HeidiSQL Версия:              10.1.0.5464
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,12 +13,10 @@
 
 
 -- Дамп структуры базы данных flk_egrn
-DROP DATABASE IF EXISTS `flk_egrn`;
 CREATE DATABASE IF NOT EXISTS `flk_egrn` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `flk_egrn`;
 
 -- Дамп структуры для таблица flk_egrn.kad_rayon
-DROP TABLE IF EXISTS `kad_rayon`;
 CREATE TABLE IF NOT EXISTS `kad_rayon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `number` varchar(5) NOT NULL DEFAULT '0',
@@ -30,22 +28,23 @@ CREATE TABLE IF NOT EXISTS `kad_rayon` (
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.protokol_export
-DROP TABLE IF EXISTS `protokol_export`;
 CREATE TABLE IF NOT EXISTS `protokol_export` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `Year` year(4) DEFAULT NULL,
-  `number` int(11) NOT NULL DEFAULT '0',
+  `Year` year(4) DEFAULT NULL COMMENT 'Год',
+  `number` int(11) NOT NULL DEFAULT '0' COMMENT 'Порядковый номер с начала года',
   `period_start` date DEFAULT NULL,
   `period_stop` date DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  `date_update` date DEFAULT NULL,
+  `date` date DEFAULT NULL COMMENT 'Дата отправки протокола',
+  `date_update` date DEFAULT NULL COMMENT 'Дата переформирования протокола',
+  `visible` int(1) DEFAULT NULL COMMENT 'Отражать или нет в списке',
+  `type` varchar(1) DEFAULT NULL COMMENT 'Тип протокола: П- периодическая (в основном декадная), Г- годовая, К- корректирующая (выгрузка по списку непрошедших ФЛК после исправления), Т- тестовая (предварительная выгрузка для исправления ФЛК перед основной).',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `Year_period_start_period_stop_date_type` (`Year`,`period_start`,`period_stop`,`date`,`type`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.protokol_file
-DROP TABLE IF EXISTS `protokol_file`;
 CREATE TABLE IF NOT EXISTS `protokol_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `vid_object` varchar(50) DEFAULT NULL COMMENT 'ЗУ, ОКС, ПИК',
@@ -56,11 +55,22 @@ CREATE TABLE IF NOT EXISTS `protokol_file` (
   KEY `id` (`id`),
   KEY `FK_protokol_file_protokol_export` (`protokol_id`),
   CONSTRAINT `FK_protokol_file_protokol_export` FOREIGN KEY (`protokol_id`) REFERENCES `protokol_export` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
+) ENGINE=InnoDB AUTO_INCREMENT=211 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
+
+-- Экспортируемые данные не выделены.
+-- Дамп структуры для таблица flk_egrn.protokol_file_fns
+CREATE TABLE IF NOT EXISTS `protokol_file_fns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `insert_date` date NOT NULL,
+  `idfile_fns_xml` varchar(100) NOT NULL,
+  `file_urr_xml` varchar(100) NOT NULL,
+  `protokol_id` varchar(32) NOT NULL DEFAULT '0' COMMENT 'Ссылка на id PROTOKOL_EXPORT исходящего протокола',
+  PRIMARY KEY (`id`),
+  KEY `protokol_id` (`protokol_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.record_list
-DROP TABLE IF EXISTS `record_list`;
 CREATE TABLE IF NOT EXISTS `record_list` (
   `number_in_file` int(11) NOT NULL,
   `cad_obj_num` varchar(100) NOT NULL,
@@ -77,11 +87,22 @@ CREATE TABLE IF NOT EXISTS `record_list` (
   `file_name_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61125 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
+) ENGINE=InnoDB AUTO_INCREMENT=268173 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
+
+-- Экспортируемые данные не выделены.
+-- Дамп структуры для таблица flk_egrn.record_list_fns
+CREATE TABLE IF NOT EXISTS `record_list_fns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `error_id` varchar(100) NOT NULL,
+  `error_text` varchar(300) NOT NULL,
+  `error_value` varchar(300) NOT NULL,
+  `protokol_file_fns_id` varchar(32) NOT NULL DEFAULT '0' COMMENT 'Ссылка на id таблицы PROTOKOL_FILE_FNS',
+  PRIMARY KEY (`id`),
+  KEY `protokol_uid` (`protokol_file_fns_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3060 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.record_notes
-DROP TABLE IF EXISTS `record_notes`;
 CREATE TABLE IF NOT EXISTS `record_notes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `record_list_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Ссылка на запись протокола',
@@ -94,21 +115,34 @@ CREATE TABLE IF NOT EXISTS `record_notes` (
   UNIQUE KEY `record_list_id` (`record_list_id`),
   KEY `id` (`id`),
   CONSTRAINT `FK_record_notes_record_list` FOREIGN KEY (`record_list_id`) REFERENCES `record_list` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4433 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=12086 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+
+-- Экспортируемые данные не выделены.
+-- Дамп структуры для таблица flk_egrn.record_notes_fns
+CREATE TABLE IF NOT EXISTS `record_notes_fns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `record_list_id` int(11) NOT NULL DEFAULT '0' COMMENT 'Ссылка на запись протокола',
+  `decision_type` int(11) NOT NULL DEFAULT '0' COMMENT 'Вид решения',
+  `reg_no` varchar(100) DEFAULT '0' COMMENT 'Номер заявки на техошибку',
+  `text` varchar(1000) DEFAULT '0',
+  `insert_date` date DEFAULT NULL,
+  `update_date` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `record_list_id` (`record_list_id`),
+  CONSTRAINT `record_notes_fns_ibfk_1` FOREIGN KEY (`record_list_id`) REFERENCES `record_list_fns` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.resheniya
-DROP TABLE IF EXISTS `resheniya`;
 CREATE TABLE IF NOT EXISTS `resheniya` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Решения по исправления ошибок ФЛК';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='Решения по исправления ошибок ФЛК';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.vid_dok
-DROP TABLE IF EXISTS `vid_dok`;
 CREATE TABLE IF NOT EXISTS `vid_dok` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `no` int(11) DEFAULT NULL,

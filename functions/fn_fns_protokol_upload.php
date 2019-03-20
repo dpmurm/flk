@@ -31,7 +31,7 @@ function flk_fns_protokol_add($link){
 		$result_check_idfile_fns_xml = mysqli_query($link, $query_check_idfile_fns_xml);
 	
 		$query_check_file_urr_xml = "SELECT file_name_xml 
-							FROM protokol_export 
+							FROM protokol_file 
 							WHERE `file_name_xml` = '".$file_urr_xml."' LIMIT 1";
 
 		$result_check_file_urr_xml = mysqli_query($link, $query_check_file_urr_xml);
@@ -48,22 +48,30 @@ function flk_fns_protokol_add($link){
 		}
 		else
 		{
-			//Получаем protokol_uid xml файла выгрузки 
-			$query_protokol_uid = "SELECT file_name_xml, protokol_uid
-				FROM protokol_export
+			//Получаем protokol_id xml файла выгрузки
+			$query_protokol_uid = "SELECT file_name_xml, protokol_id
+				FROM protokol_file  
 				WHERE `file_name_xml` = '".$file_urr_xml."'";
-			$result_protokol_uid = mysqli_query($link, $query_protokol_uid);
-			$arr_protokol_uid = mysqli_fetch_assoc($result_protokol_uid);
-			$protokol_uid = $arr_protokol_uid['protokol_uid'];		
+			$result_protokol_id = mysqli_query($link, $query_protokol_uid);
+			$arr_protokol_id = mysqli_fetch_assoc($result_protokol_id);
+			$protokol_id = $arr_protokol_id['protokol_id'];
 
-			$arr_buid = explode("-", $protokol_uid);
+			$arr_buid = explode("-", $protokol_id);
 			$buid = $arr_buid[0]; 
 			
-			// Заполняем таблицу protokol_export_fns
-			$query_pe_fns = "INSERT INTO protokol_export_fns (`insert_date`, `idfile_fns_xml`, `file_urr_xml`, `protokol_uid`) 
-					VALUES (CURDATE(), '".$idfile_fns_xml."', '".$file_urr_xml."', '".$protokol_uid."')";
+			// Заполняем таблицу protokol_file_fns
+			$query_pe_fns = "INSERT INTO protokol_file_fns (`insert_date`, `idfile_fns_xml`, `file_urr_xml`, `protokol_id`) 
+					VALUES (CURDATE(), '".$idfile_fns_xml."', '".$file_urr_xml."', '".$protokol_id."')";
 	
-			mysqli_query($link, $query_pe_fns) or die ("Error in query: ".$query."<br>".mysqli_error($link));
+			//mysqli_query($link, $query_pe_fns) or die ("Error in query: ".$query_pe_fns."<br>".mysqli_error($link));
+            if (mysqli_query($link, $query_pe_fns)) {
+                // Obtain last inserted id
+                $file_fns_id = mysqli_insert_id($link);
+                echo "Records inserted successfully. Last inserted ID is: " . $file_fns_id;
+            } else {
+                //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
+                die ("Error in query: " . $query_pe_fns . "<br>" . mysqli_error($link));
+            }
 
 
 			// Заполняем таблицу record_list_fns
@@ -83,12 +91,12 @@ function flk_fns_protokol_add($link){
 				}
 
 				// проверяем на наличие дублей, если запись есть, пропускаем
-				$query_check_doubles_fns_xml = "SELECT error_id, error_text, error_value, protokol_uid 
+				$query_check_doubles_fns_xml = "SELECT error_id, error_text, error_value, protokol_file_fns_id 
 							FROM record_list_fns
-							WHERE `error_id` = '".$error_id."'
-							AND `error_text` = '".$error_text."'
-							AND `error_value` = '".$error_value."'
-							AND `protokol_uid` = '".$protokol_uid."'
+							WHERE `error_id` = $error_id
+							AND `error_text` = $error_text
+							AND `error_value` = $error_value
+							AND `protokol_file_fns_id` = $file_fns_id
 							LIMIT 1";
 				$result_check_doubles_fns_xml = mysqli_query($link, $query_check_doubles_fns_xml);
 				if (mysqli_num_rows($result_check_doubles_fns_xml) > 0)
@@ -98,13 +106,13 @@ function flk_fns_protokol_add($link){
 				$query_rl_fns = "INSERT INTO record_list_fns (`error_id`, 
 									`error_text`, 
 									`error_value`, 
-									`protokol_uid`) 
-								VALUES ('".$error_id."', 
-									'".$error_text."', 
-									'".$error_value."', 
-									'".$protokol_uid."')";
+									`protokol_file_fns_id`) 
+								VALUES ($error_id, 
+									$error_text, 
+									$error_value, 
+									$file_fns_id)";
 
-				mysqli_query($link, $query_rl_fns) or die ("Error in query: ".$query."<br>".mysqli_error($link));
+				mysqli_query($link, $query_rl_fns) or die ("Error in query: ".$query_rl_fns."<br>".mysqli_error($link));
 
 			}
 	

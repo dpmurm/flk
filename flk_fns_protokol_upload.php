@@ -148,6 +148,9 @@ else
 	unset($_SESSION['ffpu']['s_period_start']);
 	unset($_SESSION['ffpu']['s_period_stop']);
 	unset($_SESSION['ffpu']['s_type_unloading']);
+    $s_where = "";
+    $f_string = "";
+    $f_tu_string = "";
 }
 /* === FILTER END === */
 
@@ -155,7 +158,7 @@ else
 // Количество записей на странице
 $on_page = "15";
 
-$query_count_pages = 'SELECT COUNT(id) AS count FROM `protokol_export_fns` '.$s_where; 
+$query_count_pages = 'SELECT COUNT(id) AS count FROM `protokol_file_fns` '.$s_where;
 $arr_count_pages = fn_count_pages($link, $on_page, $query_count_pages);
 $on_page = $arr_count_pages['on_page'];
 $num_pages = $arr_count_pages['num_pages'];
@@ -163,17 +166,17 @@ $current_page = $arr_count_pages['current_page'];
 $start_from = $arr_count_pages['start_from'];
 /* === PAGE COUNTING END === */
 
-$query = 'SELECT pef.id, 
-			pef.insert_date,
-			pef.idfile_fns_xml, 
-			pef.file_urr_xml, 
-			pef.protokol_uid, 
+$query = 'SELECT pff.id, 
+			pff.insert_date,
+			pff.idfile_fns_xml, 
+			pff.file_urr_xml, 
+			pff.protokol_id, 
 			pe.date, 
 			pe.period_start, 
 			pe.period_stop, 
 			pe.type
-		FROM protokol_export_fns pef 
-		LEFT JOIN protokol_export pe ON pef.protokol_uid=pe.id ' .$s_where. '
+		FROM protokol_file_fns pff 
+		LEFT JOIN protokol_export pe ON pff.protokol_id=pe.id ' .$s_where. '
 		ORDER BY id DESC LIMIT ' .$on_page. ' OFFSET ' .$start_from ;
 
 echo '

@@ -1,5 +1,6 @@
 <?
 require_once("config.php");
+require_once ('matching.php');
 session_start();
 ?>
 <!doctype html>
@@ -29,7 +30,8 @@ include_once("config.php");
 
     <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных для организации процесса
         исправления ошибок путем внесения отметок об их исправлении.<br>
-        Также доступна <a href="index_stat.php">статистика по протоколам ФЛК</a>
+        Также доступна <a href="index_stat.php">статистика по протоколам ФЛК</a><br>
+        Перейти к <a href="index_fns.php">протоколам ФЛК 2 уровня</a>
     </p>
 
     <table class="table table-hover">
@@ -45,6 +47,7 @@ include_once("config.php");
             </th>
             <th>№ протокола</th>
             <th>Дата создания</th>
+            <th>Тип выгрузки</th>
             <th>Начало периода</th>
             <th>Конец периода</th>
             <th>Год</th>
@@ -58,6 +61,11 @@ include_once("config.php");
             $k = 0;
             while ($row = mysqli_fetch_assoc($result)) {
                 $k = $k + 1;
+                foreach ($arr_type_unloading as $id_type_unloading => $name_type_unloading) {
+                    if ($row['type'] == $id_type_unloading) {
+                        break;
+                    } else $name_type_unloading = "unknown";
+                }
                 ?>
                 <tr>
 
@@ -66,6 +74,7 @@ include_once("config.php");
                     </td>
                     <td><?= $row['number'] ?></td>
                     <td><?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
+                    <td><?= $name_type_unloading ?></td>
                     <td><?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?></td>
                     <td><?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?></td>
                     <td><?= $row['Year']; ?></td>

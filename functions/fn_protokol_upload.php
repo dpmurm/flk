@@ -183,7 +183,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
         if (mysqli_query($link, $query_add_file)) {
             // Obtain last inserted id
             $file_id = mysqli_insert_id($link);
-            echo "Records inserted successfully. Last inserted ID is: " . $last_id;
+            echo "Records inserted successfully. Last inserted ID is: " . $file_id;
         } else {
             //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
             die ("Error in query: " . $query_add_file . "<br>" . mysqli_error($link));
@@ -245,7 +245,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
             $error_type = $value_str['10'];
 
             // проверяем на наличие дублей, если запись есть, пропускаем
-            $query_check_doubles_xls = 'SELECT cad_obj_num, 
+            $query_check_doubles_xls = "SELECT cad_obj_num, 
 						type_object, 
 						status, 
 						guid_doc, 
@@ -256,23 +256,23 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
 						file_name_id 
 						 
 					FROM record_list
-					WHERE `cad_obj_num` = "' . $cad_obj_num . '"
-					AND `type_object` = "' . $type_object . '"
-					AND `status` = "' . $status . '"
-					AND `guid_doc` = "' . $guid_doc . '"
-					AND `vid_record_for_export` = "' . $vid_record_for_export . '"
-					AND `error_text` = "' . $error_text . '"
-					AND `atribut_value` = "' . $atribut_value . '"
-					AND `error_type` = "' . $error_type . '"
-					AND file_name_id = "' . $file_id . '"
-					LIMIT 1';
+					WHERE `cad_obj_num` = $cad_obj_num 
+					AND `type_object` =  $type_object 
+					AND `status` =  $status 
+					AND `guid_doc` =  $guid_doc 
+					AND `vid_record_for_export` =  $vid_record_for_export 
+					AND `error_text` =  $error_text 
+					AND `atribut_value` =  $atribut_value 
+					AND `error_type` =  $error_type 
+					AND file_name_id =  $file_id 
+					LIMIT 1";
             $result_check_doubles_xls = mysqli_query($link, $query_check_doubles_xls);
             if (mysqli_num_rows($result_check_doubles_xls) > 0) {
                 continue;
             }
 
             // Заносим данные в record_list
-            $query_parse_xls = 'INSERT INTO record_list (`cad_obj_num`,
+            $query_parse_xls = "INSERT INTO record_list (`cad_obj_num`,
 					`type_object`,
 					`status`,
 					`guid_doc`,
@@ -283,17 +283,17 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
 					`atribut_value`,
 					`error_type`,
 					`file_name_id`) 
- 				VALUES ("' . $cad_obj_num . '", 
-					"' . $type_object . '",
-					"' . $status . '", 
-					"' . $guid_doc . '",
-					"' . $vid_record_for_export . '", 
-					"' . $error_text . '",
-					"' . $error_path_xml . '", 
-					"' . $atribut_name . '",
-					"' . $atribut_value . '", 
-					"' . $error_type . '",
-					"' . $file_id . '")';
+ 				VALUES ( $cad_obj_num, 
+					$type_object,
+					 $status, 
+					 $guid_doc,
+					 $vid_record_for_export, 
+					 $error_text,
+					 $error_path_xml, 
+					 $atribut_name,
+					 $atribut_value, 
+					 $error_type,
+					 $file_id)";
 
             mysqli_query($link, $query_parse_xls) or die ("Error in query: " . $query_parse_xls . "<br>" . mysqli_error($link));
         }
@@ -343,9 +343,9 @@ function flk_protokol_delete($link)
         // и записи связаных протоколов в record_list.
         // В противном случае надо удалить только записи этого протокола
         if (isset($_GET['visible']) && $_GET['visible'] == 1) {
-            $query = "DELETE FROM protokol_export WHERE `protokol_uid` LIKE '" . $buid . "-%'";
+            $query = "DELETE FROM protokol_export WHERE `id` LIKE '" . $buid . "-%'";
         } else {
-            $query = "DELETE FROM protokol_export WHERE `protokol_uid` = '" . $_GET['protokol_uid'] . "' LIMIT 1";
+            $query = "DELETE FROM protokol_export WHERE `id` = '" . $_GET['protokol_uid'] . "' LIMIT 1";
         }
 
         mysqli_query($link, $query) or die ("Error in query: " . $query . "<br>" . mysqli_error($link));

@@ -24,19 +24,19 @@ function flk_records_note_form_insert($link)
 
             $query = "";
             $date = date('Y-m-d');
-            $query = 'INSERT INTO record_notes
+            $query = "INSERT INTO record_notes
 				VALUES (null, 
-				' . $record_list_id . ', 
-				' . $decision_type . ', 
-				\'' . $reg_no . '\', 
-				\'' . $text . '\', 
+				 $record_list_id , 
+				 $decision_type , 
+				 $reg_no , 
+				 $text , 
 				now(), 
 				null)
-				ON DUPLICATE KEY UPDATE record_list_id=\'' . $record_list_id . '\', 
-				decision_type=\'' . $decision_type . '\', 
-				reg_no=\'' . $reg_no . '\', 
-				text=\'' . $text . '\', 
-				update_date=now()';
+				ON DUPLICATE KEY UPDATE record_list_id=$record_list_id , 
+				decision_type=$decision_type , 
+				reg_no=$reg_no , 
+				text=$text , 
+				update_date=now()";
 
             $result = mysqli_query($link, $query);
 
