@@ -3,8 +3,8 @@ require_once("config.php");
 session_start();
 require_once("check_cookies.php");
 require_once("functions/fn_misc.php");
+require_once("functions/fn_knlist.php");
 require_once("matching.php");
-
 
 date_default_timezone_set("Europe/Moscow");
 if (isset($_GET['protokol_id'])) {
@@ -85,6 +85,19 @@ else
     $sel_reshenie = "-1";
 }
 
+if (isset($_GET['sel_vid_object']))
+{
+    $sel_vid_object = $_SESSION['fpr']['sel_vid_object'] = $_GET['sel_vid_object'];
+}
+elseif (isset($_SESSION['fpr']['sel_vid_object']))
+{
+    $sel_vid_object = $_SESSION['fpr']['sel_vid_object'];
+}
+else
+{
+    $sel_vid_object = "-1";
+}
+//echo $sel_vid_object;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -143,9 +156,63 @@ else
         }
         ?>
     </select>
+    <select class="main" name="sel_vid_object" >
+        <option value="-1">Все объекты</option>
+
+        <?php
+        // Вид объекта
+        foreach ($arr_vid_object as $number_vid_object => $name_vid_object){
+            if (isset($sel_vid_object) && $sel_vid_object == $number_vid_object)
+            {
+                echo '<option value="'.$number_vid_object.'" selected>'.$name_vid_object.'</option>';
+            }
+            else
+            {
+                echo '<option value="'.$number_vid_object.'">'.$name_vid_object.'</option>';
+            }
+        }
+        ?>
+    </select>&nbsp;
     <button class="button" type="submit">Применить</button>
 </form>
 <br>
+<?php
+//Условия фильтра
+$where_sel = "";
+
+if ($sel_rayon >= 0)
+{
+    $where_sel .= " AND rl.cad_obj_num LIKE '51:".$sel_rayon.":%'";
+}
+if ($sel_reshenie >= 0)
+{
+    $where_sel .= " AND ifnull(rn.decision_type,0) = '".$sel_reshenie."'";
+}
+if ($sel_vid_object == 'ЗУ')
+{
+    $where_sel .= " AND rl.type_object = 'Земельный участок'";
+}
+if ($sel_vid_object == 'ОКС')
+{
+    $where_sel .= " AND (rl.type_object = 'Здание/Сооружение' OR rl.type_object = 'Помещение')";
+}
+//Конец фильтра
+?>
+<!-- === SHOW_KN_FOR_KORR BEGIN === -->
+<?php
+// показываем ссылку на список КН, если наш ip в списке разрешенных
+$ipaddr = $_SERVER['REMOTE_ADDR'];
+if (in_array("$ipaddr", $arr_ip_allow))
+{
+    echo '<a href="?show_kn=1">Список КН</a><br>';
+}
+if (isset($_GET['show_kn']) && $_GET['show_kn'] == 1)
+{
+    show_kn($link, $protokol_id, $where_sel);
+}
+?>
+<br>
+<!-- === SHOW_KN_FOR_KORR END === -->
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <tr>
         <th></th>
@@ -161,29 +228,6 @@ else
 
     </tr>
     <?php
-    // Условия фильтра
-    if ($sel_rayon >= 0 && $sel_reshenie >= 0)
-    {
-        $where_sel = "
-		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'
-		and ifnull(rn.decision_type,0) = ".$sel_reshenie."";
-    }
-    elseif ($sel_rayon >= 0)
-    {
-        $where_sel = "
-		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'";
-    }
-    elseif ($sel_reshenie >= 0)
-    {
-        $where_sel = "
-		and ifnull(rn.decision_type,0) = ".$sel_reshenie."";
-    }
-    else
-    {
-        $where_sel = "";
-    }
-    //Конец фильтра
-
     include_once("config.php");
 
     $query = "select rl.id,
