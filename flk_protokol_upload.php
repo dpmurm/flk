@@ -11,9 +11,9 @@ require_once("functions/fn_pagination.php");
 require_once "PHPExcel/PHPExcel.php";
 
 if (isset($_POST['number'])) {
-    $vid_object = $_SESSION['fpu']['number'] = $_POST['number'];
+    $number = $_SESSION['fpu']['number'] = $_POST['number'];
 } elseif (isset($_SESSION['fpu']['number'])) {
-    $vid_object = $_SESSION['fpu']['number'];
+    $number = $_SESSION['fpu']['number'];
 } else {
     $number = 0;
 }
@@ -316,7 +316,7 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
             <th class="main"></th>
             -->
             <th class="main">
-                <input required type="date" class="date w130" name="number"
+                <input required class="date w130" name="number"
                        value="<?= $number; ?>"/>
             </th>
             <th class="main">

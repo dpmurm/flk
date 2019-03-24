@@ -3,7 +3,7 @@
 function flk_protokol_add($link, $arr_xls_heads)
 {
     if (isset($_POST['number']) && is_numeric($_POST['number'])) {
-        $vid_object = $_POST['number'];
+        $number = $_POST['number'];
     } else {
         $number = 0;
     }
@@ -41,13 +41,15 @@ function flk_protokol_add($link, $arr_xls_heads)
         $visible = 0;
     }
 
-    if (isset($_POST['type_unloading']) && is_numeric($_POST['type_unloading'])) {
+    if (isset($_POST['type_unloading']) //&& is_numeric($_POST['type_unloading'])
+        ) {
         $type_unloading = $_POST['type_unloading'];
     } else {
         $type_unloading = 0;
     }
 
-    if (isset($_POST['vid_object']) && is_numeric($_POST['vid_object'])) {
+    if (isset($_POST['vid_object']) //&& is_numeric($_POST['vid_object'])
+        ) {
         $vid_object = $_POST['vid_object'];
     } else {
         $vid_object = 0;
@@ -81,7 +83,7 @@ function flk_protokol_add($link, $arr_xls_heads)
             return false;
         } else {
             // Переходим к обработке протокола
-            flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml);
+            flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml);
         }
     } else {
         echo '<b style="color: red;">ERROR: проверьте корректность загружаемых файлов</b>
@@ -94,7 +96,7 @@ function flk_protokol_add($link, $arr_xls_heads)
 }
 
 // Функция обработки протокола
-function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
+function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
 {
 
     // Если все переменные определены, начинаем обработку
@@ -145,10 +147,10 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
         //Если записи нет, то вставляем новую запись, берем её id
         $query_ptotokol = "select id from protokol_export pe
                         where pe.Year=YEAR(CURDATE())
-                        and pe.date=$date
-                        and pe.period_start=$period_start
-                        and pe.period_stop=$period_stop
-                        and pe.type=$type_unloading
+                        and pe.date='$date'
+                        and pe.period_start='$period_start'
+                        and pe.period_stop='$period_stop'
+                        and pe.type='$type_unloading'
                         ";
         if ($result = mysqli_query($link, $query_ptotokol)) {
             if (mysqli_num_rows($result) == 1) {
@@ -159,16 +161,16 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
                 // Добавляем запись о протоколе в protokol_export
                 $query_add_prot = "INSERT INTO protokol_export 
                                   ( number, Year ,`date`,`period_start`,`period_stop`,`visible`,`type`) 
-		                          VALUES ($number ,YEAR(CURDATE()), $date ,  $period_start , $period_stop,  $visible , $type_unloading )";
+		                          VALUES ($number ,YEAR(CURDATE()), '$date' ,  '$period_start' , '$period_stop',  $visible , '$type_unloading' )";
 
-
+                echo $query_add_prot;
                 if (mysqli_query($link, $query_add_prot)) {
                     // Obtain last inserted id
                     $protokol_id = mysqli_insert_id($link);
                     echo "Records inserted successfully. Last inserted ID is: " . $protokol_id;
                 } else {
                     //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
-                    die ("Error in query: " . $query_add_prot . "<br>" . mysqli_error($link));
+                    die ("Ошибка в запросе: " . $query_add_prot . "<br>" . mysqli_error($link));
                 }
             }
         }
@@ -177,7 +179,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
         $query_add_file = "INSERT INTO protokol_file (
             `vid_object`, `file_name_excel`,`file_name_xml`,`protokol_id`) 
 		VALUES ( 
-		    $vid_object , $file_xls ,  $file_xml , $protokol_id )";
+		    '$vid_object' , '$file_xls' ,  '$file_xml' , '$protokol_id' )";
 
 
         if (mysqli_query($link, $query_add_file)) {
@@ -233,6 +235,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
             }
 
             // Получаем необходимые данные из массива
+            $number_in_file=$value_str['0'];
             $cad_obj_num = $value_str['1'];
             $type_object = $value_str['2'];
             $status = $value_str['3'];
@@ -245,7 +248,9 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
             $error_type = $value_str['10'];
 
             // проверяем на наличие дублей, если запись есть, пропускаем
-            $query_check_doubles_xls = "SELECT cad_obj_num, 
+            $query_check_doubles_xls = "SELECT
+                        number_in_file, 
+                        cad_obj_num, 
 						type_object, 
 						status, 
 						guid_doc, 
@@ -256,14 +261,16 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
 						file_name_id 
 						 
 					FROM record_list
-					WHERE `cad_obj_num` = $cad_obj_num 
-					AND `type_object` =  $type_object 
-					AND `status` =  $status 
-					AND `guid_doc` =  $guid_doc 
+					WHERE
+					number_in_file=$number_in_file 
+					and `cad_obj_num` = '$cad_obj_num' 
+					AND `type_object` =  '$type_object' 
+					AND `status` =  '$status' 
+					AND `guid_doc` =  '$guid_doc' 
 					AND `vid_record_for_export` =  $vid_record_for_export 
-					AND `error_text` =  $error_text 
-					AND `atribut_value` =  $atribut_value 
-					AND `error_type` =  $error_type 
+					AND `error_text` =  '$error_text' 
+					AND `atribut_value` =  '$atribut_value' 
+					AND `error_type` =  '$error_type' 
 					AND file_name_id =  $file_id 
 					LIMIT 1";
             $result_check_doubles_xls = mysqli_query($link, $query_check_doubles_xls);
@@ -272,7 +279,9 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
             }
 
             // Заносим данные в record_list
-            $query_parse_xls = "INSERT INTO record_list (`cad_obj_num`,
+            $query_parse_xls = "INSERT INTO record_list (
+                    number_in_file,
+                    `cad_obj_num`,
 					`type_object`,
 					`status`,
 					`guid_doc`,
@@ -283,16 +292,18 @@ function flk_protokol_parsing($link, $arr_xls_heads, $date, $period_start, $peri
 					`atribut_value`,
 					`error_type`,
 					`file_name_id`) 
- 				VALUES ( $cad_obj_num, 
-					$type_object,
-					 $status, 
-					 $guid_doc,
+ 				VALUES ( 
+ 				    $number_in_file,
+ 				    '$cad_obj_num', 
+					'$type_object',
+					 '$status', 
+					 '$guid_doc',
 					 $vid_record_for_export, 
-					 $error_text,
-					 $error_path_xml, 
-					 $atribut_name,
-					 $atribut_value, 
-					 $error_type,
+					 '$error_text',
+					 '$error_path_xml', 
+					 '$atribut_name',
+					 '$atribut_value', 
+					 '$error_type',
 					 $file_id)";
 
             mysqli_query($link, $query_parse_xls) or die ("Error in query: " . $query_parse_xls . "<br>" . mysqli_error($link));
