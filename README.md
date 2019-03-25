@@ -1,21 +1,30 @@
 # flk
-Ссылка на скачивание Toad for Mysql
-https://mariadb.com/kb/en/library/toad-for-mysql-80/
 
-Дамп структуры базы в файле flk_tables.sql
+**Заливаем дампы таблиц в базу:** 
+
+Используемое свободное ПО:
+- Веб-сервер Apache 2.6
+- PHP 5.6
+- База данных MariaDB 10.3 (https://mariadb.com/downloads/)
+- Toad for Mysql (https://mariadb.com/kb/en/library/toad-for-mysql-80/)
+или HeidiSQL (https://www.heidisql.com/download.php)
+
+Дамп структуры базы в файле flk_egrn_all_tables.sql
+Заполняем пару таблиц resheniya.sql и vid_doc.sql
+Заполняем таблицу kad_rayon по своим районам со своими отделами по территориальной принадлежности
+
+**Стартовая страница:** 
+- index.php         список протоколов
 
 **После загрузки структуры**
-- ручками заполняете protokol_export
-- ручками заполняете protokol_file
-- resheniya и vid_dok есть готовые дампы
-- в таблицу record_list импортируете протоколы в EXCEL через встроенный визард в Toad for Mysql
-- таблицу record_notes заполняют пользователи через веб-интерфейс
 
-**Стартовые файлы:** 
-- index.php         список протоколов
-- index_stat.php    статистика по протоколам
+Создан Веб-интерфейс загрузки файлов протоколов в EXCEL формате в БД (спасибо Курган)
+![](/pict/protokol_upload.jpg)
 
-Проект обновляется, следите за закладкой COMMITS
+
+**Развитие проекта** 
+
+Cледите за закладкой COMMITS (нормально отображается в браузере Chrome)
 
 **Скриншоты работы системы**
 

@@ -316,7 +316,7 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
             <th class="main"></th>
             -->
             <th class="main">
-                <input required class="date w130" name="number"
+                <input required type="number" class="number w40" name="number"
                        value="<?= $number; ?>"/>
             </th>
             <th class="main">

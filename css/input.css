@@ -57,7 +57,8 @@ border-radius: 3px 3px 3px 3px;
 }
 
 input.number.w40 {
-width: 40px; 
+width: 40px;
+    height: 22px;
 }
 
 input.number.w50 {
