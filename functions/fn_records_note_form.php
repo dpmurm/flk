@@ -28,14 +28,14 @@ function flk_records_note_form_insert($link)
 				VALUES (null, 
 				 $record_list_id , 
 				 $decision_type , 
-				 $reg_no , 
-				 $text , 
+				 '$reg_no' , 
+				 '$text' , 
 				now(), 
 				null)
 				ON DUPLICATE KEY UPDATE record_list_id=$record_list_id , 
 				decision_type=$decision_type , 
-				reg_no=$reg_no , 
-				text=$text , 
+				reg_no='$reg_no' , 
+				text='$text' , 
 				update_date=now()";
 
             $result = mysqli_query($link, $query);
