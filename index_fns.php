@@ -12,21 +12,21 @@ require_once("matching.php");
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/table.css">
-	<title>Протоколы ФЛК ФНС</title>
+	<title>Протоколы ФЛК 2 уровня</title>
 </head>
 <body>
 
 <?php
-$title = 'Протоколы ФЛК ФНС';
+$title = 'Протоколы ФЛК 2 уровня';
 $ipaddr = $_SERVER['REMOTE_ADDR'];
-$query = 'SELECT MAX(pef.id) AS id, 
-			MAX(pef.insert_date) AS insert_date, 
+$query = 'SELECT pff.id AS id, 
+			pff.insert_date AS insert_date, 
 			pe.period_start AS period_start, 
 			pe.period_stop AS period_stop, 
-			pe.type AS type_unloading, 
+			pe.type, 
 			pe.id AS protokol_uid 
-			FROM protokol_export_fns pef 
-			left join protokol_export pe on pef.protokol_uid=pe.id
+			FROM protokol_file_fns pff 
+			left join protokol_export pe on pff.protokol_id=pe.id
 			GROUP BY pe.date, 
 				pe.period_start, 
 				pe.period_stop, 
@@ -52,7 +52,7 @@ $query = 'SELECT MAX(pef.id) AS id,
 			}
 			?>
 			</th>
-			<th class="main min_v1 max_v1">Загружен</th>
+			<th class="main min_v1 max_v1">Дата загрузки</th>
 			<th class="main min_v1 max_v1">Начало периода</th>
 			<th class="main min_v1 max_v1">Конец периода</th>
 			<th class="main min_v1 max_v1">Тип выгрузки</th>
@@ -119,6 +119,6 @@ $query = 'SELECT MAX(pef.id) AS id,
 		</tbody>
 	</table>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 </body>

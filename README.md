@@ -3,8 +3,8 @@
 **Заливаем дампы таблиц в базу:** 
 
 Используемое свободное ПО:
-- Веб-сервер Apache 2.6
-- PHP 5.6
+- Веб-сервер Apache 2.4 (http://httpd.apache.org/download.cgi#apache24)
+- PHP 5.6 (https://www.php.net/archive/2019.php#id2019-01-10-4)
 - База данных MariaDB 10.3 (https://mariadb.com/downloads/)
 - Toad for Mysql (https://mariadb.com/kb/en/library/toad-for-mysql-80/)
 или HeidiSQL (https://www.heidisql.com/download.php)
@@ -18,7 +18,7 @@
 
 **После загрузки структуры**
 
-Создан Веб-интерфейс загрузки файлов протоколов в EXCEL формате в БД (спасибо Курган)
+Создан Веб-интерфейс загрузки файлов протоколов EXCEL формата в БД (спасибо Курган)
 ![](/pict/protokol_upload.jpg)
 
 

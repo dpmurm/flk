@@ -356,14 +356,14 @@ elseif(isset($_GET['rabbit_hole']) && $_GET['rabbit_hole'] == "1"){
 
 				// сопоставляем идентификаторы типов выгрузки читаемым именам
 				foreach ($arr_type_unloading as $id_type_unloading => $name_type_unloading){
-					if ($row['type_unloading'] == $id_type_unloading){break;}
+					if ($row['type'] == $id_type_unloading){break;}
 					else $name_type_unloading = "unknown";
 				}
 
 				echo '<tr class="hover" title="Загружен '.$insert_date.'">
 					<form name="flk_edit'.$k.'" method="GET" action="?">
 					<input type="hidden" name="id" value="'.$row['id'].'" />
-					<input type="hidden" name="protokol_uid" value="'.$row['protokol_uid'].'" />
+					<input type="hidden" name="protokol_id" value="'.$row['protokol_id'].'" />
 					<td class="main">'.$date.'</td>
 					<td class="main">'.$period_start.'</td>
 					<td class="main">'.$period_stop.'</td>
