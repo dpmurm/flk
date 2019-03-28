@@ -6,7 +6,7 @@ require_once("functions/fn_misc.php");
 require_once("matching.php");
 
 date_default_timezone_set("Europe/Moscow");
-
+/*
 if (isset($_GET['buid'])) 
 {
 	$buid = $_SESSION['ffpr']['buid'] = $_GET['buid'];
@@ -19,18 +19,18 @@ else
 {
 	$buid = 0;
 }
-
-if (isset($_GET['id'])) 
+*/
+if (isset($_GET['protokol_id']))
 {
-	$id = $_SESSION['ffpr']['id'] = $_GET['id'];
+	$protokol_id = $_SESSION['ffpr']['protokol_id'] = $_GET['protokol_id'];
 } 
-elseif (isset($_SESSION['ffpr']['id'])) 
+elseif (isset($_SESSION['ffpr']['protokol_id']))
 {
-	$id = $_SESSION['ffpr']['id'];
+	$protokol_id = $_SESSION['ffpr']['protokol_id'];
 }
 else 
 {
-	$id = 0;
+	$protokol_id = 0;
 }
 
 if (isset($_GET['sel_rayon'])  && is_numeric($_GET['sel_rayon'])) 
@@ -60,12 +60,11 @@ else
 }
 
 // Получаем период выгрузки
-$query_period = "SELECT pef.id AS id, 
-			pe.period_start AS period_start, 
-			pe.period_stop AS period_stop 
-			FROM protokol_export_fns pef 
-			left join protokol_export pe on pef.protokol_uid=pe.protokol_uid
-			WHERE pef.id = '".$id."'";
+$query_period = "SELECT 
+			pe.period_start, 
+			pe.period_stop 
+			FROM protokol_export pe 
+			WHERE pe.id = $protokol_id";
 $result_period = mysqli_query($link, $query_period);
 $arr_period = mysqli_fetch_assoc($result_period);
 $period_start = $arr_period['period_start'];
@@ -154,7 +153,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		<th>Вид объекта</th>
 		<th>Текст ошибки ФЛК</th>
 		<th>Значение элемента</th>
-
+        <th>Позиция элемента в XML файле</th>
 	</thead>
 	<?php
 
@@ -162,13 +161,13 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	if ($sel_rayon >= 0 && $sel_reshenie >= 0)
 	{
 		$where_sel = "
-		and rl.cad_obj_num LIKE '__:".$sel_rayon.":%'
+		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'
 		and ifnull(rnf.decision_type,0) = ".$sel_reshenie."";
 	}
 	elseif ($sel_rayon >= 0)
 	{
 		$where_sel = "
-		and rl.cad_obj_num LIKE '__:".$sel_rayon.":%'";
+		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'";
 	}
 	elseif ($sel_reshenie >= 0)
 	{
@@ -187,13 +186,14 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		rl.cad_obj_num,	
 		substr(rl.cad_obj_num, 4, 2) AS rayon,
 		rl.type_object,
-		ifnull(rnf.decision_type, 0) AS reshenie
-		from record_list_fns rlf
+		ifnull(rnf.decision_type, 0) AS reshenie,
+		rlf.error_poz
+		from protokol_file_fns pff
+		LEFT JOIN record_list_fns rlf on rlf.protokol_file_fns_id=pff.id
 		LEFT JOIN record_list rl ON rlf.error_id=rl.guid_doc   
 		LEFT JOIN record_notes_fns rnf ON rlf.id=rnf.record_list_id   
 		WHERE 
-		rlf.protokol_uid LIKE '".$buid."-%'
-		AND rl.protokol_uid LIKE '".$buid."-%'
+		pff.protokol_id =$protokol_id
 		".$where_sel."
 		ORDER BY rayon, rl.cad_obj_num, rl.type_object";
 	//print_r($query);
@@ -211,13 +211,14 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		
 			echo '<tr class="hover">
 
-				<td id="'.$row['id'].'"><a href="flk_fns_records_note_form.php?record_id='.$row['id'].'">'.$name_reshenie.'</a></td>
+				<td id="'.$row['id'].'"><a href="flk_fns_records_note_form.php?record_list_id='.$row['id'].'">'.$name_reshenie.'</a></td>
 				<td>'.$k.'</td>
 				<td>'.$row['rayon'].'</td>
 				<td>'.$row['cad_obj_num'].'</td>
 				<td>'.$row['type_object'].'</td>
 				<td>'.$row['error_text'].'</td>
 				<td>'.$row['error_value'].'</td>
+				<td>'.$row['error_poz'].'</td>
 			</tr>';
 		}
 	}

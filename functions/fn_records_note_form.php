@@ -48,7 +48,7 @@ function flk_records_note_form_insert($link)
             if ($result) {
                 mysqli_close($link);
                 echo '<script language="JavaScript"> 
- 						window.location.href = "flk_protokol_records.php#' . $record_list_id . '"
+ 						window.location.href = "flk_protokol_records.php#' . $record_list_id . '"	
 					</script>';
             } else {
                 echo '<br>Ошибки:<br>';

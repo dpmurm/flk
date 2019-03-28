@@ -24,7 +24,7 @@ $query = 'SELECT pff.id AS id,
 			pe.period_start AS period_start, 
 			pe.period_stop AS period_stop, 
 			pe.type, 
-			pe.id AS protokol_uid 
+			pe.id AS protokol_id 
 			FROM protokol_file_fns pff 
 			left join protokol_export pe on pff.protokol_id=pe.id
 			GROUP BY pe.date, 
@@ -38,6 +38,7 @@ $query = 'SELECT pff.id AS id,
 
 	<p>На этой странице размещен список протоколов ФЛК ФНС для организации процесса
 		исправления ошибок путем внесения отметок об их исправлении.<br>
+        Перейти к <a href="index.php">протоколам ФЛК 1 уровня</a>
 	<!--	Также доступна <a href="index_stat.php">статистика по протоколам ФЛК</a> -->
 	</p>
 
@@ -68,8 +69,8 @@ $query = 'SELECT pff.id AS id,
 			while ($row = mysqli_fetch_assoc($result)) {
 				$k = $k + 1;
 				
-				// Базовый uid протокола
-				$arr_buid = explode("-", $row['protokol_uid']);
+				// Базовый id протокола
+				$arr_buid = explode("-", $row['protokol_id']);
 				$buid = $arr_buid[0]; 
 				
 				// Преобразуем формат даты для удобного отображения
@@ -98,7 +99,7 @@ $query = 'SELECT pff.id AS id,
 				}
 				echo '<tr class="hover">
 					<td class="main">
-						<a href="flk_fns_protokol_records.php?id='.$row['id'].'&buid='.$buid.'">Открыть</a>
+						<a href="flk_fns_protokol_records.php?protokol_id='.$row['protokol_id'].'">Открыть</a>
 					</td>
 					<td class="main">'.$insert_date.'</td>
 					<td class="main">'.$period_start.'</td>

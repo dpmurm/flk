@@ -1,9 +1,9 @@
 ﻿<?php
 date_default_timezone_set("Europe/Moscow");
-if (isset($_GET['record_id'])) {
-	$record_id = $_GET['record_id']; // Если нет номера отдела берется 0
+if (isset($_GET['record_list_id'])) {
+	$record_list_id = $_GET['record_list_id']; // Если нет номера отдела берется 0
 } else {
-	$record_id = 0;
+	$record_list_id = 0;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -41,15 +41,16 @@ if (isset($_GET['record_id'])) {
 		rlf.error_id, 
 		rlf.error_text,
 		rlf.error_value,
+		rlf.error_poz,
 		ifnull(rnf.decision_type,0) AS reshenie,
-		pef.file_urr_xml,
-		pef.idfile_fns_xml
+		pff.file_urr_xml,
+		pff.idfile_fns_xml
 		from record_list_fns rlf
 		left join record_notes_fns rnf on rlf.id=rnf.record_list_id   
 		left join record_list rl on rlf.error_id=rl.guid_doc   
-		left join protokol_export_fns pef on rlf.protokol_uid=pef.protokol_uid   
+		left join protokol_file_fns pff on rlf.protokol_file_fns_id=pff.id  
 		WHERE
-		rlf.id='".$record_id."'";
+		rlf.id='".$record_list_id."'";
 
 	if ($result = mysqli_query($link, $query)) {
 
@@ -61,6 +62,7 @@ if (isset($_GET['record_id'])) {
 				<tr><td>Вид объекта</td><td><?php echo $row['type_object']; ?></td></tr>
 				<tr><td>Описание ошибки ФЛК</td><td><font color=red><?php echo $row['error_text']; ?></font></td></tr>
 				<tr><td>Значение элемента</td><td><?php echo $row['error_value']; ?></td></tr>
+                <tr><td>Значение элемента</td><td><?php echo $row['error_poz']; ?></td></tr>
 				<tr><td>Файл выгрузки</td><td><?php echo $row['file_urr_xml']; ?></td></tr>
 				<tr><td>Файл протокола ФНС</td><td><?php echo $row['idfile_fns_xml']; ?></td></tr>
 

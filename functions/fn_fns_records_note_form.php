@@ -17,7 +17,7 @@ function flk_fns_records_note_form_insert($link){
 			if (!get_magic_quotes_gpc()) {
 				$record_list_id = $_GET['record_list_id'];
 				$decision_type=$_GET['decision_type'];
-				$buid=$_GET['buid'];
+				//$buid=$_GET['buid'];
 				$reg_no = mysqli_escape_string($link, $_GET['reg_no']);
 				$text = mysqli_escape_string($link, $_GET['text']);
 			};
@@ -51,7 +51,7 @@ function flk_fns_records_note_form_insert($link){
 
 function flk_fns_records_note_form_cancel($link){
 	$record_list_id = $_GET['record_list_id'];
-	$buid=$_GET['buid'];
+	//$buid=$_GET['buid'];
 	mysqli_close($link);
 	echo '<script language="JavaScript"> 
 		window.location.href = "flk_fns_protokol_records.php#'.$record_list_id.'"
