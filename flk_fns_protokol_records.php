@@ -94,13 +94,13 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	<link rel="stylesheet" href="css/select.css">
 	<link rel="stylesheet" href="css/table.css">
 	<link rel="stylesheet" href="css/colors.css">
-	<title>Протокол ФЛК ФНС</title>
+	<title>Протокол ФЛК 2 уровня</title>
 </head>
 
 <body>
 
 <h3>Протокол ФЛК ФНС за период с <?= $period_start ?> по <?= $period_stop ?></h3>
-<br> Вернуться к <a href="index_fns.php">протоколам ФЛК ФНС</a><br><br><br>
+<br> Вернуться к <a href="index_fns.php">протоколам ФЛК 2 уровня</a><br><br><br>
 
 <form method="GET" name="select_rayon" action="?">
 	<select class="main" name="sel_rayon">
@@ -186,7 +186,16 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		rl.cad_obj_num,	
 		substr(rl.cad_obj_num, 4, 2) AS rayon,
 		rl.type_object,
-		ifnull(rnf.decision_type, 0) AS reshenie,
+		-- ifnull(rnf.decision_type, 0) AS reshenie,
+		case 
+          WHEN  ifnull(rnf.decision_type,0)=0 THEN 'Не обработано' 
+          WHEN  ifnull(rnf.decision_type,0)=1 THEN 'В работе' 
+          WHEN  ifnull(rnf.decision_type,0)=2 THEN 'Исправлена' 
+          WHEN  ifnull(rnf.decision_type,0)=3 THEN 'Невозможно исправить' 
+          WHEN  ifnull(rnf.decision_type,0)=4 THEN 'Не обнаружена' 
+          ELSE  ifnull(rnf.decision_type,0) 
+        END
+         AS reshenie,
 		rlf.error_poz
 		from protokol_file_fns pff
 		LEFT JOIN record_list_fns rlf on rlf.protokol_file_fns_id=pff.id
@@ -194,6 +203,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		LEFT JOIN record_notes_fns rnf ON rlf.id=rnf.record_list_id   
 		WHERE 
 		pff.protokol_id =$protokol_id
+		and rlf.error_id is not null -- Чистим пустые строки от пустых xml файлов от ФНС
 		".$where_sel."
 		ORDER BY rayon, rl.cad_obj_num, rl.type_object";
 	//print_r($query);
@@ -202,16 +212,9 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		$k = 0;
 		while ($row = mysqli_fetch_assoc($result)) {
 			$k = $k + 1;
-			
-			// сопоставляем id решения читаемым именам
-			foreach ($arr_reshenie as $id_reshenie => $name_reshenie){
-				if ($row['reshenie'] == $id_reshenie){break;}
-				else {$name_reshenie = "UNKNOWN";}
-			}
-		
 			echo '<tr class="hover">
 
-				<td id="'.$row['id'].'"><a href="flk_fns_records_note_form.php?record_list_id='.$row['id'].'">'.$name_reshenie.'</a></td>
+				<td id="'.$row['id'].'"><a href="flk_fns_records_note_form.php?record_list_id='.$row['id'].'">'.$row['reshenie'].'</a></td>
 				<td>'.$k.'</td>
 				<td>'.$row['rayon'].'</td>
 				<td>'.$row['cad_obj_num'].'</td>

@@ -106,10 +106,10 @@ $query = 'SELECT pff.id AS id,
 					<td class="main">'.$period_stop.'</td>
 					<td class="main">'.$name_type_unloading.'</td>
 					<td class="main">
-						<a href="flk_fns_protokol_stat_procent_ispravlen.php?id='.$row['id'].'&buid='.$buid.'">ход&nbsp;исправления</a>
+						<a href="flk_fns_protokol_stat_procent_ispravlen.php?protokol_id='.$row['protokol_id'].'">ход&nbsp;исправления</a>
 					</td>
 					<td class="main">
-						<a href="flk_fns_protokol_stat_vid_oshibok.php?id='.$row['id'].'&buid='.$buid.'">виды&nbsp;ошибок</a>
+						<a href="flk_fns_protokol_stat_vid_oshibok.php?protokol_id='.$row['protokol_id'].'">виды&nbsp;ошибок</a>
 					</td>
 				</tr>';
 			}
