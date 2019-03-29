@@ -20,6 +20,7 @@ require_once("matching.php");
 $title = 'Протоколы ФЛК 2 уровня';
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 $query = 'SELECT pff.id AS id, 
+            pe.number,
 			pff.insert_date AS insert_date, 
 			pe.period_start AS period_start, 
 			pe.period_stop AS period_stop, 
@@ -53,6 +54,7 @@ $query = 'SELECT pff.id AS id,
 			}
 			?>
 			</th>
+            <th class="main min_v1 max_v1">Номер протокола</th>
 			<th class="main min_v1 max_v1">Дата загрузки</th>
 			<th class="main min_v1 max_v1">Начало периода</th>
 			<th class="main min_v1 max_v1">Конец периода</th>
@@ -101,6 +103,7 @@ $query = 'SELECT pff.id AS id,
 					<td class="main">
 						<a href="flk_fns_protokol_records.php?protokol_id='.$row['protokol_id'].'">Открыть</a>
 					</td>
+					<td class="main">'.$row['number'].'</td>
 					<td class="main">'.$insert_date.'</td>
 					<td class="main">'.$period_start.'</td>
 					<td class="main">'.$period_stop.'</td>
