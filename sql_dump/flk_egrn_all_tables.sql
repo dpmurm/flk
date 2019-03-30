@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Хост:                         localhost
+-- Хост:                         10.51.118.210
 -- Версия сервера:               5.5.50-MariaDB - mariadb.org binary distribution
 -- Операционная система:         Win64
 -- HeidiSQL Версия:              10.1.0.5464
@@ -88,7 +88,8 @@ CREATE TABLE IF NOT EXISTS `record_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_name_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `id` (`id`)
+  KEY `id` (`id`),
+  KEY `guid_doc` (`guid_doc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=275442 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
 
 -- Экспортируемые данные не выделены.
@@ -102,7 +103,8 @@ CREATE TABLE IF NOT EXISTS `record_list_fns` (
   `error_id` varchar(100) NOT NULL,
   `protokol_file_fns_id` varchar(32) NOT NULL DEFAULT '0' COMMENT 'Ссылка на id таблицы PROTOKOL_FILE_FNS',
   PRIMARY KEY (`id`),
-  KEY `protokol_uid` (`protokol_file_fns_id`)
+  KEY `protokol_uid` (`protokol_file_fns_id`),
+  KEY `error_id` (`error_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3906 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
@@ -119,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `record_notes` (
   UNIQUE KEY `record_list_id` (`record_list_id`),
   KEY `id` (`id`),
   CONSTRAINT `FK_record_notes_record_list` FOREIGN KEY (`record_list_id`) REFERENCES `record_list` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12400 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=12759 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.record_notes_fns
@@ -134,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `record_notes_fns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `record_list_id` (`record_list_id`),
   CONSTRAINT `record_notes_fns_ibfk_1` FOREIGN KEY (`record_list_id`) REFERENCES `record_list_fns` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.resheniya

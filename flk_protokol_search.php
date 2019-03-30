@@ -40,26 +40,27 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 
 <body>
 <div class="main">
-<h3><?= $title; ?></h3>
+    <h1>Форма поиска сведений о выгрузке ОН по кадастровому номеру</h1>
 <br> Вернуться к <a href="index.php">протоколам ФЛК</a>
 <br>
-<br>
+    <h3><?= $title; ?></h3>
 
+    <form method="GET" name="form_search_kn" id="form_search_kn" action="?">
+    <input class="date" style="width: 100%;" name="search_kn" form="form_search_kn" placeholder="Поиск по КН" />
+    <button class="button" form="form_search_kn" type="submit">Найти</button>
+    </form>
 <table class="main">
 	<thead class="main">
 	<tr class="main">
-		<th class="main min_v1 max_v1"></th>
-		<th class="main min_v1 max_v1">Протокол от</th>
-		<th class="main min_v1 max_v1">Начало периода</th>
-		<th class="main min_v1 max_v1">Конец периода</th>
-		<th class="main min_v1 max_v1">Тип выгрузки</th>
-		<th class="nobrd main min_v2 max_v1">
-		<form method="GET" name="form_search_kn" id="form_search_kn" action="?"></form>
-			<input class="date" style="width: 100%;" name="search_kn" form="form_search_kn" placeholder="Поиск по КН" />
-		</th>
-		<th class="main nobrd">
-			<button class="button" form="form_search_kn" type="submit">Найти</button>
-		</th>
+		<th class="main">ФЛК 1 уровня</th>
+        <th class="main">Статус испр.</th>
+		<th class="main">Протокол от</th>
+		<th class="main">Начало периода</th>
+		<th class="main">Конец периода</th>
+		<th class="main">Тип выгрузки</th>
+        <th class="main">Файл выгрузки ФЛК 1 уровня</th>
+		<th class="main">Ошибка ФНС (ФЛК 2 уровня)</th>
+        <th class="main">Статус испр. ош. ФНС</th>
 	</tr>
 	</thead>
 	<?php
@@ -77,26 +78,50 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 	$query = "SELECT 
 		rl.cad_obj_num, 
 		rl.status,
+		-- rn.decision_type,
+		case 
+          WHEN  rn.decision_type=0 THEN 'Не обработано' 
+          WHEN  rn.decision_type=1 THEN 'В работе' 
+          WHEN  rn.decision_type=2 THEN 'Исправлена' 
+          WHEN  rn.decision_type=3 THEN 'Невозможно исправить' 
+          WHEN  rn.decision_type=4 THEN 'Не обнаружена' 
+          ELSE  rn.decision_type
+        END
+         AS decision_type,
 		pe.id AS id,
-		pe.insert_date,
+		pe.date,
 		pe.period_start,
-		pe.type_unloading,
+		pe.type,
 		pe.period_stop,
-		pe.file_name_xml,
-		pe.protokol_uid
+		pf.file_name_xml,
+		rlf.error_text,
+		-- rnf.decision_type as fns_decision_type,
+		case 
+          WHEN  rnf.decision_type=0 THEN 'Не обработано' 
+          WHEN  rnf.decision_type=1 THEN 'В работе' 
+          WHEN  rnf.decision_type=2 THEN 'Исправлена' 
+          WHEN  rnf.decision_type=3 THEN 'Невозможно исправить' 
+          WHEN  rnf.decision_type=4 THEN 'Не обнаружена' 
+          ELSE  rnf.decision_type
+        END
+         AS fns_decision_type
 	FROM record_list rl
-	LEFT JOIN protokol_export pe ON rl.protokol_uid=pe.protokol_uid
+	LEFT JOIN record_notes rn on rl.id = rn.record_list_id
+	LEFT JOIN protokol_file pf on rl.file_name_id=pf.id
+	LEFT JOIN protokol_export pe ON pf.protokol_id=pe.id
+	LEFT JOIN record_list_fns rlf on rl.guid_doc=rlf.error_id
+	LEFT JOIN record_notes_fns rnf on rlf.id = rnf.record_list_id
 	WHERE  
 		".$where_search_kn."
 	GROUP BY rl.cad_obj_num, 
 	rl.status, 
-	pe.insert_date, 
+	pe.date, 
 	pe.period_start, 
 	pe.period_stop, 
-	pe.type_unloading,
-	pe.file_name_xml
-	ORDER BY pe.insert_date DESC
-	LIMIT 100";
+	pe.type,
+	pf.file_name_xml
+	ORDER BY pe.date DESC
+	";
 
 	//print_r($query);
 	
@@ -110,12 +135,12 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 				$id = $row['id'];
 
 				// Базовый uid протокола
-				$arr_buid = explode("-", $row['protokol_uid']);
+				$arr_buid = explode("-", $row['id']);
 				$buid = $arr_buid[0]; 
 				
 				// Преобразуем формат даты для удобного отображения
-				if($formated_date = DateTime::createFromFormat('Y-m-d', $row['insert_date'])){
-					$insert_date = DateTime::createFromFormat('Y-m-d', $row['insert_date']) -> format('d.m.Y');
+				if($formated_date = DateTime::createFromFormat('Y-m-d', $row['date'])){
+					$insert_date = DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y');
 				}else{
 					$insert_date = '';
 				}
@@ -134,7 +159,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 
 				// сопоставляем идентификаторы типов выгрузки читаемым именам
 				foreach ($arr_type_unloading as $id_type_unloading => $name_type_unloading){
-					if ($row['type_unloading'] == $id_type_unloading){break;}
+					if ($row['type'] == $id_type_unloading){break;}
 					else $name_type_unloading = "unknown";
 				}
 
@@ -143,7 +168,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 				{
 					$file_name_xml = '';
 					echo '<td class="main">
-					<a href="flk_protokol_records.php?id='.$id.'&buid='.$buid.'">'.$row['status'].'</a>
+					<a href="flk_protokol_records.php?protokol_id='.$row['id'].'&buid='.$buid.'">'.$row['status'].'</a>
 					</td>';
 				}
 				else
@@ -154,12 +179,14 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 					</td>';
 				}
 				echo '
+                <td class="main">'.$row['decision_type'].'</td>
 				<td class="main">'.$insert_date.'</td>
 				<td class="main">'.$period_start.'</td>
 				<td class="main">'.$period_stop.'</td>
 				<td class="main">'.$name_type_unloading.'</td>
-				<td class="main" colspan="2">'.$file_name_xml.'</td>
-				<td class="main"></td>
+				<td class="main">'.$file_name_xml.'</td>
+				<td class="main">'.$row['error_text'].'</td>
+				<td class="main">'.$row['fns_decision_type'].'</td>
 			</tr>';
 		}
 	}
