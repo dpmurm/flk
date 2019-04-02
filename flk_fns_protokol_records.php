@@ -161,13 +161,13 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	if ($sel_rayon >= 0 && $sel_reshenie >= 0)
 	{
 		$where_sel = "
-		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'
+		and rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'
 		and ifnull(rnf.decision_type,0) = ".$sel_reshenie."";
 	}
 	elseif ($sel_rayon >= 0)
 	{
 		$where_sel = "
-		and rl.cad_obj_num LIKE '51:".$sel_rayon.":%'";
+		and rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'";
 	}
 	elseif ($sel_reshenie >= 0)
 	{

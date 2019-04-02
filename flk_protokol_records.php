@@ -182,7 +182,7 @@ $where_sel = "";
 
 if ($sel_rayon >= 0)
 {
-    $where_sel .= " AND rl.cad_obj_num LIKE '51:".$sel_rayon.":%'";
+    $where_sel .= " AND rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'";
 }
 if ($sel_reshenie >= 0)
 {
