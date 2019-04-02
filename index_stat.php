@@ -30,7 +30,6 @@ include_once("config.php");
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
             <th>№ протокола</th>
             <th>Дата создания</th>
             <th>Начало периода</th>
@@ -47,10 +46,7 @@ include_once("config.php");
                 ?>
                 <tr>
                     <td>
-                        <a href="flk_protokol_stat_procent_export.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">% прохождения по док.</a>
-                    </td>
-                    <td>
-                        <a href="flk_protokol_stat_procent_export_on.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">% прохождения по ОН</a>
+                        % прохождения <a href="flk_protokol_stat_procent_export.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по документам</a> / <a href="flk_protokol_stat_procent_export_on.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по объектам</a>
                     </td>
                     <td>
                         <a href="flk_protokol_stat_procent_ispravlen.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">ход исправления</a>

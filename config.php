@@ -1,4 +1,10 @@
 ﻿<?php
+//IP адреса с которых доступны ссылки на загрузку протоколов
+$arr_ip_allow = array(
+    '127.0.0.1',
+    '10.51.114.211'
+);
+
 //$doc_root = $_SERVER["DOCUMENT_ROOT"]."/";
 $host = $_SERVER['HTTP_HOST'];
 $site = basename(__DIR__);

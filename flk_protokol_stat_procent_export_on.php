@@ -16,12 +16,12 @@ if (isset($_GET['year'])) {
     $year = 0;
 }
 if (isset($_GET['period_start'])) {
-    $period_start = $_GET['period_start']; // Если нет номера отдела берется 0
+    $period_start =$_GET['period_start']?DateTime::createFromFormat('Y-m-d', $_GET['period_start']) -> format('d.m.Y'):$_GET['period_start'] ; // Если нет номера отдела берется 0
 } else {
     $period_start = 0;
 }
 if (isset($_GET['period_stop'])) {
-    $period_stop = $_GET['period_stop']; // Если нет номера отдела берется 0
+    $period_stop = $_GET['period_stop']?DateTime::createFromFormat('Y-m-d', $_GET['period_stop']) -> format('d.m.Y'):$_GET['period_stop']; // Если нет номера отдела берется 0
 } else {
     $period_stop = 0;
 }
