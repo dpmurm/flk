@@ -21,7 +21,7 @@ require_once("matching.php");
 $title = 'Протоколы ФЛК исходящей выгрузки';
 
 $query = 'Select * from protokol_export
-        order by Year desc, number desc
+        order by Year desc, date desc
         ';
 include_once("config.php");
 ?>
