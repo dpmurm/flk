@@ -59,7 +59,7 @@ else
     $id = 0;
 }
 
-if (isset($_GET['sel_rayon'])  && is_numeric($_GET['sel_rayon']))
+if (isset($_GET['sel_rayon'])  )
 {
     $sel_rayon = $_SESSION['fpr']['sel_rayon'] = $_GET['sel_rayon'];
 }
@@ -120,14 +120,14 @@ else
 
 <form method="GET" name="select_rayon" action="?">
     <select class="main" name="sel_rayon">
-        <option value="-1">Кад. район не выбран</option>';
+        <option value="-1">Кад. район не выбран</option>
         <?php
         // Список районов
-        $rayon_result = mysqli_query($link, 'SELECT number,name FROM `kad_rayon`');
+        $rayon_result = mysqli_query($link, 'SELECT number,name, region FROM `kad_rayon` order by region, number');
         while($row = mysqli_fetch_assoc($rayon_result)){
-            $arr_rayon[$row['number']] = $row['name'];
+            $arr_rayon[$row['region'].":".$row['number']] = $row['name'];
         }
-        asort($arr_rayon);
+        //asort($arr_rayon);
         foreach ($arr_rayon as $number_rayon => $name_rayon){
             if (isset($sel_rayon) && $sel_rayon == $number_rayon)
             {
@@ -182,7 +182,7 @@ $where_sel = "";
 
 if ($sel_rayon >= 0)
 {
-    $where_sel .= " AND rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'";
+    $where_sel .= " AND rl.cad_obj_num LIKE '".$sel_rayon.":%'";
 }
 if ($sel_reshenie >= 0)
 {

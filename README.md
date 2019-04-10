@@ -1,5 +1,5 @@
 # flk
-##Настройка
+## Настройка
 
 **Используемое свободное ПО**
 - Веб-сервер Apache 2.4 (http://httpd.apache.org/download.cgi#apache24)

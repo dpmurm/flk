@@ -163,11 +163,11 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
                                   ( number, Year ,`date`,`period_start`,`period_stop`,`visible`,`type`) 
 		                          VALUES ($number ,YEAR(CURDATE()), '$date' ,  '$period_start' , '$period_stop',  $visible , '$type_unloading' )";
 
-                echo $query_add_prot;
+                //echo $query_add_prot;
                 if (mysqli_query($link, $query_add_prot)) {
                     // Obtain last inserted id
                     $protokol_id = mysqli_insert_id($link);
-                    echo "Records inserted successfully. Last inserted ID is: " . $protokol_id;
+                    echo "Запись в таблицу protokol_export добавлена успешно. ID добавленной записи: " . $protokol_id."<br>";
                 } else {
                     //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
                     die ("Ошибка в запросе: " . $query_add_prot . "<br>" . mysqli_error($link));
@@ -185,10 +185,10 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
         if (mysqli_query($link, $query_add_file)) {
             // Obtain last inserted id
             $file_id = mysqli_insert_id($link);
-            echo "Records inserted successfully. Last inserted ID is: " . $file_id;
+            echo "Запись в таблицу protokol_file добавлена успешно. ID добавленной записи: " . $file_id."<br>";
         } else {
             //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
-            die ("Error in query: " . $query_add_file . "<br>" . mysqli_error($link));
+            die ("Ошибка в запросе: " . $query_add_file . "<br>" . mysqli_error($link));
         }
 
         // Продолжаем разбирать содержимое файла
@@ -306,7 +306,7 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
 					 '$error_type',
 					 $file_id)";
 
-            mysqli_query($link, $query_parse_xls) or die ("Error in query: " . $query_parse_xls . "<br>" . mysqli_error($link));
+            mysqli_query($link, $query_parse_xls) or die ("Ошибка в запросе: " . $query_parse_xls . "<br>" . mysqli_error($link));
         }
     } else {
         echo '<b style="color: red;">ERROR: не все переменные определены!</b>';
@@ -337,7 +337,7 @@ function flk_protokol_update($link)
 				WHERE `id`=" . $id . " 
 				LIMIT 1";
 
-    mysqli_query($link, $query) or die ("Error in query: " . $query . "<br>" . mysqli_error($link));
+    mysqli_query($link, $query) or die ("Ошибка в запросе: " . $query . "<br>" . mysqli_error($link));
 }
 
 // Функция удаления протокола 
@@ -359,7 +359,7 @@ function flk_protokol_delete($link)
             $query = "DELETE FROM protokol_export WHERE `id` = '" . $_GET['protokol_uid'] . "' LIMIT 1";
         }
 
-        mysqli_query($link, $query) or die ("Error in query: " . $query . "<br>" . mysqli_error($link));
+        mysqli_query($link, $query) or die ("Ошибка в запросе: " . $query . "<br>" . mysqli_error($link));
     }
 }
 
@@ -369,7 +369,7 @@ function flk_protokol_clear($link)
     $protokol_export_list = array('protokol_export', 'record_list', 'record_notes');
     foreach ($protokol_export_list as $value) {
         $query = "TRUNCATE TABLE " . $value . "";
-        mysqli_query($link, $query) or die ("Error in query: " . $query . "<br>" . mysqli_error($link));
+        mysqli_query($link, $query) or die ("Ошибка в запросе: " . $query . "<br>" . mysqli_error($link));
     }
 }
 
