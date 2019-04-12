@@ -33,7 +33,7 @@ else
 	$protokol_id = 0;
 }
 
-if (isset($_GET['sel_rayon'])  && is_numeric($_GET['sel_rayon'])) 
+if (isset($_GET['sel_rayon']) )
 {
 	$sel_rayon = $_SESSION['ffpr']['sel_rayon'] = $_GET['sel_rayon'];
 }
@@ -107,11 +107,11 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	<option value="-1">Кад. район не выбран</option>';
 <?php
 	// Список районов
-	$rayon_result = mysqli_query($link, 'SELECT number,name FROM `kad_rayon`');
+	$rayon_result = mysqli_query($link, 'SELECT number, name, region FROM `kad_rayon` order by region, number');
  	while($row = mysqli_fetch_assoc($rayon_result)){
-		$arr_rayon[$row['number']] = $row['name'];
+		$arr_rayon[$row['region'].":".$row['number']] = $row['name'];
 	}
-	asort($arr_rayon);
+	//asort($arr_rayon);
 	foreach ($arr_rayon as $number_rayon => $name_rayon){
 		if (isset($sel_rayon) && $sel_rayon == $number_rayon)
 			{
@@ -156,27 +156,20 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
         <th>Позиция элемента в XML файле</th>
 	</thead>
 	<?php
+    //Условия фильтра
+    $where_sel = "";
 
 	// Условия фильтра
-	if ($sel_rayon >= 0 && $sel_reshenie >= 0)
+	if ($sel_rayon >= 0 )
 	{
-		$where_sel = "
-		and rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'
+		$where_sel .= "
+		and rl.cad_obj_num LIKE '".$sel_rayon.":%'";
+
+	}
+	if ($sel_reshenie >= 0)
+	{
+		$where_sel .= "
 		and ifnull(rnf.decision_type,0) = ".$sel_reshenie."";
-	}
-	elseif ($sel_rayon >= 0)
-	{
-		$where_sel = "
-		and rl.cad_obj_num LIKE '$region:".$sel_rayon.":%'";
-	}
-	elseif ($sel_reshenie >= 0)
-	{
-		$where_sel = "
-		and ifnull(rnf.decision_type,0) = ".$sel_reshenie."";
-	}
-	else
-	{
-		$where_sel = "";
 	}
 	
 	$query = "SELECT rlf.id AS id,

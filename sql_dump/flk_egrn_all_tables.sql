@@ -1,5 +1,5 @@
 -- --------------------------------------------------------
--- Хост:                         10.51.118.210
+-- Хост:
 -- Версия сервера:               5.5.50-MariaDB - mariadb.org binary distribution
 -- Операционная система:         Win64
 -- HeidiSQL Версия:              10.1.0.5464
@@ -19,6 +19,7 @@ USE `flk_egrn`;
 -- Дамп структуры для таблица flk_egrn.kad_rayon
 CREATE TABLE IF NOT EXISTS `kad_rayon` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `region` varchar(2) DEFAULT NULL COMMENT 'Кадастровый округ, Мурманск -51',
   `number` varchar(5) NOT NULL DEFAULT '0' COMMENT 'Номер кадастрового района (00, 01, 02, 03 и т.д.)',
   `name` varchar(100) NOT NULL DEFAULT '0' COMMENT 'Наименование кадастрового района',
   `otdel_name` varchar(100) NOT NULL DEFAULT '0' COMMENT 'Наименование отдела по территориальной принадлежности',
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `protokol_export` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Year_period_start_period_stop_date_type` (`Year`,`period_start`,`period_stop`,`date`,`type`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.protokol_file
@@ -56,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `protokol_file` (
   KEY `id` (`id`),
   KEY `FK_protokol_file_protokol_export` (`protokol_id`),
   CONSTRAINT `FK_protokol_file_protokol_export` FOREIGN KEY (`protokol_id`) REFERENCES `protokol_export` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=219 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
+) ENGINE=InnoDB AUTO_INCREMENT=224 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.protokol_file_fns
@@ -90,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `record_list` (
   PRIMARY KEY (`id`),
   KEY `id` (`id`),
   KEY `guid_doc` (`guid_doc`)
-) ENGINE=InnoDB AUTO_INCREMENT=275442 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
+) ENGINE=InnoDB AUTO_INCREMENT=281353 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.record_list_fns
@@ -121,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `record_notes` (
   UNIQUE KEY `record_list_id` (`record_list_id`),
   KEY `id` (`id`),
   CONSTRAINT `FK_record_notes_record_list` FOREIGN KEY (`record_list_id`) REFERENCES `record_list` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12759 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=13097 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.record_notes_fns
@@ -136,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `record_notes_fns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `record_list_id` (`record_list_id`),
   CONSTRAINT `record_notes_fns_ibfk_1` FOREIGN KEY (`record_list_id`) REFERENCES `record_list_fns` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=821 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 -- Дамп структуры для таблица flk_egrn.resheniya
