@@ -4,6 +4,8 @@ date_default_timezone_set("Europe/Moscow");
 $arr_ip_allow = array(
     '127.0.0.1',
     '10.51.114.211',
+    '10.51.114.73',
+    '10.51.118.217',
 );
 
 //$doc_root = $_SERVER["DOCUMENT_ROOT"]."/";

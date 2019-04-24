@@ -57,7 +57,7 @@ if (isset($_GET['period_stop'])) {
     include_once("config.php");
 
     $query = "select  
-kr.otdel_name, CONCAT(kr.name,' (',substr(rl.cad_obj_num,4,2),')') as rayon, 
+kr.otdel_name, CONCAT(kr.name, ' (', kr.region, ':',substr(rl.cad_obj_num,4,2),')') as rayon, 
 sum(IF (ifnull(rn.decision_type,0) = 0, 1, 0)) as ne_obrabot,
 sum(IF (ifnull(rn.decision_type,0) = 1, 1, 0)) as v_rabote,
 sum(IF (ifnull(rn.decision_type,0) = 2, 1, 0)) as ispravlena,
@@ -73,7 +73,7 @@ left join kad_rayon kr on kr.number=substr(rl.cad_obj_num,4,2)
 where    
 pe.id=$protokol_id
 and rl.status!='Прошел ФЛК'
-group by   kr.otdel_name, CONCAT(kr.name,' (',substr(rl.cad_obj_num,4,2),')')
+group by   kr.otdel_name, CONCAT(kr.name, ' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
 order by 1";
     //echo $query;
 
