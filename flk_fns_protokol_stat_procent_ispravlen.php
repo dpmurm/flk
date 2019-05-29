@@ -75,7 +75,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	require_once("config.php");
 
 	$query = "SELECT  
-		kr.otdel_name, 
+		kr.otdel_name, kr.region,
 		CONCAT(kr.name,' (', kr.region, ':',substr(rl.cad_obj_num,4,2),')') as rayon, 
 		sum(IF (ifnull(rnf.decision_type,0) = 0, 1, 0)) as ne_obrabot,
 		sum(IF (ifnull(rnf.decision_type,0) = 1, 1, 0)) as v_rabote,
@@ -91,7 +91,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	WHERE	
 		pff.protokol_id =$protokol_id
 		and rlf.error_id is not null
-	GROUP BY kr.otdel_name, CONCAT(kr.name,' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
+	GROUP BY kr.otdel_name, kr.region, CONCAT(kr.name,' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
 	ORDER BY 1";
 	//echo $query;
 

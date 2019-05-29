@@ -55,13 +55,12 @@ $query = 'SELECT pff.id AS id,
 			}
 			?>
 			</th>
-            <th class="main min_v1 max_v1">Номер протокола</th>
-			<th class="main min_v1 max_v1">Дата загрузки</th>
-			<th class="main min_v1 max_v1">Начало периода</th>
-			<th class="main min_v1 max_v1">Конец периода</th>
-			<th class="main min_v1 max_v1">Тип выгрузки</th>
-			<th class="main min_v2 max_v1"></th>
-			<th class="main min_v2"></th>
+            <th class="main">Номер протокола</th>
+			<th class="main">Дата загрузки</th>
+			<th class="main">Начало периода</th>
+			<th class="main">Конец периода</th>
+			<th class="main">Тип выгрузки</th>
+			<th class="main" colspan="2">Статистика по протоколам</th>
 		</tr>
 		</thead>
 		<tbody>
