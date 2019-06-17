@@ -74,9 +74,9 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 
 	require_once("config.php");
 
-	$query = "SELECT  
-		kr.otdel_name, kr.region,
-		CONCAT(kr.name,' (', kr.region, ':',substr(rl.cad_obj_num,4,2),')') as rayon, 
+	$query = "SELECT
+        kr.otdel_name,  		
+		CONCAT(kr.name,' (', kr.region, ':',substr(rl.cad_obj_num,4,2),')') as rayon,
 		sum(IF (ifnull(rnf.decision_type,0) = 0, 1, 0)) as ne_obrabot,
 		sum(IF (ifnull(rnf.decision_type,0) = 1, 1, 0)) as v_rabote,
 		sum(IF (ifnull(rnf.decision_type,0) = 2, 1, 0)) as ispravlena,
@@ -87,11 +87,11 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	LEFT JOIN record_list_fns rlf on pff.id=rlf.protokol_file_fns_id
 	LEFT JOIN record_list rl ON rlf.error_id=rl.guid_doc   
 	LEFT JOIN record_notes_fns rnf ON rlf.id=rnf.record_list_id   
-	LEFT JOIN kad_rayon kr ON kr.number=substr(rl.cad_obj_num,4,2)
+	LEFT JOIN kad_rayon kr ON concat(kr.region, ':',kr.number)=SUBSTR(cad_obj_num,1,5)
 	WHERE	
 		pff.protokol_id =$protokol_id
 		and rlf.error_id is not null
-	GROUP BY kr.otdel_name, kr.region, CONCAT(kr.name,' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
+	GROUP BY    kr.otdel_name, CONCAT(kr.name,' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
 	ORDER BY 1";
 	//echo $query;
 

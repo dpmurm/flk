@@ -69,7 +69,7 @@ from record_list rl
 left join record_notes rn on rl.id=rn.record_list_id   
 left join protokol_file pf on rl.file_name_id=pf.id 
 left join protokol_export pe  on pf.protokol_id=pe.id
-left join kad_rayon kr on kr.number=substr(rl.cad_obj_num,4,2)
+left join kad_rayon kr on concat(kr.region, ':',kr.number)=SUBSTR(cad_obj_num,1,5)
 where    
 pe.id=$protokol_id
 and rl.status!='Прошел ФЛК'
