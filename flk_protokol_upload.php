@@ -357,12 +357,12 @@ if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") 
                 </select>
             </th>
             <th class="main">
-                <input type="hidden" name="MAX_FILE_SIZE" value="10000000"/>
+                <input type="hidden" name="MAX_FILE_SIZE" value="104857600"/>
                 <input required type="file" class="button fileupload w100pt" name="filexls"
                        accept="application/vnd.ms-excel"/>
             </th>
             <th class="main">
-                <input type="hidden" name="MAX_FILE_SIZE" value="20000000"/>
+                <input type="hidden" name="MAX_FILE_SIZE" value="104857600"/>
                 <input required type="file" class="button fileupload w100pt" name="filexml" accept="text/xml"/>
             </th>
             <th class="main">

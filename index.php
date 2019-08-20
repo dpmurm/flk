@@ -30,8 +30,11 @@ include_once("config.php");
 
     <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных для организации процесса
         исправления ошибок путем внесения отметок об их исправлении.<br>
-        Перейти к <a href="index_fns.php">протоколам ФЛК 2 уровня</a><br>
-        Перейти <a href="flk_protokol_search.php">к поиску сведений о выгрузке ОН</a> по кадастровому номеру
+    <h4>
+        <a href="index_fns.php">Протоколы ФЛК 2 уровня</a> /
+        <a href="flk_protokol_search.php">Поиск сведений о выгрузке ОН по кадастровому номеру</a> /
+        <a href="https://fias.nalog.ru/ExtendedSearchPage.aspx"> Поиск адреса по ФИАС</a>
+    </h4>
     </p>
 
     <table class="table table-hover">

@@ -289,7 +289,7 @@ elseif(isset($_GET['rabbit_hole']) && $_GET['rabbit_hole'] == "1"){
 	<tr>
 		<form enctype="multipart/form-data" method="POST" name="flk_fns_donwload" action="">
 		<td class="main nobrd">
-			<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+			<input type="hidden" name="MAX_FILE_SIZE" value="104857600" />
 			<input required type="file" class="button fileupload w100pt" name="filefnsxml" accept="text/xml" />
 		</td>
 		<td class="main nobrd">
