@@ -200,8 +200,9 @@ echo '
 <div class="main">
 	<h1>' . $title . '</h1>
 	<p>
-	На этой странице происходит загрузка <a href="index.php">протоколов ФЛК</a> для организации процесса исправления ошибок.
+	На этой странице происходит загрузка <a href="index.php">протоколов ФЛК</a> для организации процесса исправления ошибок. Также доступна <a href="upload_files.php">групповая загрузка файлов</a>.
 	<br>
+	
 	<details>
 	<summary style="text-decoration: none; cursor: pointer;">
 	Фильтр ' . $f_string . $f_tu_string . '

@@ -42,14 +42,14 @@ function flk_protokol_add($link, $arr_xls_heads)
     }
 
     if (isset($_POST['type_unloading']) //&& is_numeric($_POST['type_unloading'])
-        ) {
+    ) {
         $type_unloading = $_POST['type_unloading'];
     } else {
         $type_unloading = 0;
     }
 
     if (isset($_POST['vid_object']) //&& is_numeric($_POST['vid_object'])
-        ) {
+    ) {
         $vid_object = $_POST['vid_object'];
     } else {
         $vid_object = 0;
@@ -83,7 +83,7 @@ function flk_protokol_add($link, $arr_xls_heads)
             return false;
         } else {
             // Переходим к обработке протокола
-            flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml);
+            flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml);
         }
     } else {
         echo '<b style="color: red;">ERROR: проверьте корректность загружаемых файлов</b>
@@ -122,9 +122,58 @@ UPLOAD_ERR_EXTENSION
 
 }
 
+/*
+$link - коннект к БД
+$arr_xls_heads - названия колонок в xls протоколе
+$number - номер протокола
+$date - дата получения протокола
+$period_start - дата начала периода
+$period_stop - дата конца периода
+$visible - видимость протокола
+$type_unloading - тип выгрузки
+$vid_object - вид объекта недвижимости
+$protokol_uid - id протокола
+$file_xls - наименование xls файла
+$tmp_file_xls - путь к файлу xls протокола для импорта данных
+$file_xml - наименование xml файла
+ */
 // Функция обработки протокола
-function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
+function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
 {
+    if ($type_unloading==0) {
+
+        // === Получаем вид объекта (ЗУ, ОКС) BEGIN ===
+        //Наименование файла xml
+        //Тип файла xml
+        //echo "upload/$file_xml".file_exists("upload/$file_xml").mime_content_type("upload/$file_xml");
+        if (file_exists("upload/$file_xml") and mime_content_type("upload/$file_xml") === 'application/xml') {
+            $arr_xml = simplexml_load_string(file_get_contents("upload/$file_xml"));
+
+            $arr_typeinf_xml = $arr_xml->xpath("//Файл/@ТипИнф");
+            $obj_typeinf_xml = $arr_typeinf_xml['0']['ТипИнф'];
+            if (empty($obj_typeinf_xml)) {
+                echo '<div class="error">ERROR: Отсутствует атрибут "ТипИнф", проверьте корректность загружаемого XML файла.</div>';
+                return false;
+            } else {
+                $typeinf_xml = $obj_typeinf_xml->__toString();
+            }
+
+            if (strpos($typeinf_xml, 'РОСРЕЕСТР_ЗУ') !== false) {
+                $vid_object = 'ЗУ';
+            } elseif (strpos($typeinf_xml, 'РОСРЕЕСТР_ОН') !== false) {
+                $vid_object = 'ОКС';
+            } else {
+                echo '<div class="error">ERROR: Некорректный атрибут "ТипИнф" ("' . $typeinf_xml . '"), проверьте корректность загружаемого XML файла.</div>';
+                return false;
+            }
+        } else {
+            echo '<div class="error">ERROR: проверьте корректность загружаемых файлов<br><pre>';
+            print_r($_FILES);
+            echo '</pre></div>';
+            return false;
+        }
+// === Получаем вид объекта (ЗУ, ОКС) END ===
+    }
 
     // Если все переменные определены, начинаем обработку
     if (isset($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)) {
@@ -137,7 +186,9 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
         Пример использования PHPExcel взят с https://habr.com/post/178089/
         --------------------------------------------------------------
         */
-
+        /////////////////////////////////////////////////////////////////////////////////////////////////2020
+        //echo $tmp_file_xls . 'PHPExcel_IOFactory::load(\'\' . $tmp_file_xls . \'\')';
+        //////////////////////////////////////////////////////////////////////////////////////////////////2020
         $PHPExcel_file = PHPExcel_IOFactory::load('' . $tmp_file_xls . '');
 
         // в протоколах только 1 лист, так что перебирать листы не требуется
@@ -194,7 +245,7 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
                 if (mysqli_query($link, $query_add_prot)) {
                     // Obtain last inserted id
                     $protokol_id = mysqli_insert_id($link);
-                    echo "Запись в таблицу protokol_export добавлена успешно. ID добавленной записи: " . $protokol_id."<br>";
+                    echo "Запись в таблицу protokol_export добавлена успешно. ID добавленной записи: " . $protokol_id . "<br>";
                 } else {
                     //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
                     die ("Ошибка в запросе: " . $query_add_prot . "<br>" . mysqli_error($link));
@@ -212,7 +263,7 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
         if (mysqli_query($link, $query_add_file)) {
             // Obtain last inserted id
             $file_id = mysqli_insert_id($link);
-            echo "Запись в таблицу protokol_file добавлена успешно. ID добавленной записи: " . $file_id."<br>";
+            echo "Запись в таблицу protokol_file добавлена успешно. ID добавленной записи: " . $file_id . "<br>";
         } else {
             //echo "ERROR: Could not able to execute $query_add_prot. " . mysqli_error($link);
             die ("Ошибка в запросе: " . $query_add_file . "<br>" . mysqli_error($link));
@@ -262,7 +313,7 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
             }
 
             // Получаем необходимые данные из массива
-            $number_in_file=$value_str['0'];
+            $number_in_file = $value_str['0'];
             $cad_obj_num = $value_str['1'];
             $type_object = $value_str['2'];
             $status = $value_str['3'];
@@ -335,6 +386,9 @@ function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_star
 
             mysqli_query($link, $query_parse_xls) or die ("Ошибка в запросе: " . $query_parse_xls . "<br>" . mysqli_error($link));
         }
+        global $good;
+        $good=1; //Сигнал на окончание загрузки и началу переноса файлов в папку storage
+        return $good;
     } else {
         echo '<b style="color: red;">ERROR: не все переменные определены!</b>';
         return false;
