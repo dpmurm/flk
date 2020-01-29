@@ -140,6 +140,8 @@ $file_xml - наименование xml файла
 // Функция обработки протокола
 function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
 {
+    global $good;
+    $good=0;
     if ($type_unloading==0) {
 
         // === Получаем вид объекта (ЗУ, ОКС) BEGIN ===
@@ -386,8 +388,8 @@ function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_sta
 
             mysqli_query($link, $query_parse_xls) or die ("Ошибка в запросе: " . $query_parse_xls . "<br>" . mysqli_error($link));
         }
-        global $good;
-        $good=1; //Сигнал на окончание загрузки и началу переноса файлов в папку storage
+        //Сигнал на окончание загрузки и началу переноса файлов в папку storage
+        $good=1;
         return $good;
     } else {
         echo '<b style="color: red;">ERROR: не все переменные определены!</b>';

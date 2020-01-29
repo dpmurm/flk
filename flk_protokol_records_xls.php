@@ -1,4 +1,10 @@
-﻿<?php header("Content-Type: application/vnd.ms-excel");
+﻿<?php
+header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+header("Content-Disposition: attachment; filename=protokol.xls");  //File name extension was wrong
+header("Expires: 0");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Cache-Control: private",false);
+//header("Content-Type: application/vnd.ms-excel");
 date_default_timezone_set("Europe/Moscow");
 if (isset($_GET['protokol_id'])) {
     $protokol_id = $_GET['protokol_id']; // Если нет номера отдела берется 0
@@ -10,10 +16,10 @@ if (isset($_GET['number'])) {
 } else {
     $number = 0;
 }
-if (isset($_GET['year'])) {
-    $year = $_GET['year']; // Если нет номера отдела берется 0
+if (isset($_GET['date'])) {
+    $date = $_GET['date']?DateTime::createFromFormat('Y-m-d', $_GET['date']) -> format('d.m.Y'):$_GET['date'] ; // Если нет номера отдела берется 0
 } else {
-    $year = 0;
+    $date = 0;
 }
 if (isset($_GET['period_start'])) {
     $period_start = $_GET['period_start']; // Если нет номера отдела берется 0
@@ -34,7 +40,7 @@ if (isset($_GET['period_stop'])) {
     <title>ИСПОЛНЕНО</title>
 </head>
 <body>
-   <!-- <h2><font color=red>Протокол передачи сведений в ФНС <?=$year?> года номер <?=$number?> за период с <?=$period_start?> по <?=$period_stop?></font></h2>-->
+   <!-- <h2><font color=red>Протокол передачи сведений в ФНС <?=$date?> номер <?=$number?> за период с <?=$period_start?> по <?=$period_stop?></font></h2>-->
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <tr>
         <th >Решение</th>

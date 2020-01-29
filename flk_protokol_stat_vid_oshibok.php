@@ -10,10 +10,10 @@ if (isset($_GET['number'])) {
 } else {
     $number = 0;
 }
-if (isset($_GET['year'])) {
-    $year = $_GET['year']; // Если нет номера отдела берется 0
+if (isset($_GET['date'])) {
+    $date = $_GET['date']?DateTime::createFromFormat('Y-m-d', $_GET['date']) -> format('d.m.Y'):$_GET['date'] ; // Если нет даты берется 0
 } else {
-    $year = 0;
+    $date = 0;
 }
 if (isset($_GET['period_start'])) {
     $period_start =$_GET['period_start']?DateTime::createFromFormat('Y-m-d', $_GET['period_start']) -> format('d.m.Y'):$_GET['period_start'] ; // Если нет номера отдела берется 0
@@ -37,7 +37,7 @@ if (isset($_GET['period_stop'])) {
 
 <body>
 
-<h2><font color=red>Виды ошибок протокола ФЛК от <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
+<h2><font color=red>Виды ошибок протокола ФЛК от <?= $date ?> номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
 
 
 <table width="100%" border="1" cellspacing="0" cellpadding="0">

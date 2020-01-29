@@ -32,7 +32,7 @@ include_once("config.php");
         исправления ошибок путем внесения отметок об их исправлении.<br>
     <h4>
         <a href="index_fns.php">Протоколы ФЛК 2 уровня</a> /
-        <a href="flk_protokol_search.php">Поиск сведений о выгрузке ОН по кадастровому номеру</a> /
+        <a href="flk_protokol_search.php">Поиск сведений о выгрузке объекта по кадастровому номеру</a> /
         <a href="https://fias.nalog.ru/ExtendedSearchPage.aspx"> Поиск адреса по ФИАС</a>
     </h4>
     </p>
@@ -74,7 +74,7 @@ include_once("config.php");
                 <tr>
 
                     <td>
-                        <a href="flk_protokol_records.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a>
+                        <a href="flk_protokol_records.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Открыть</a>
                     </td>
                     <td><?= $row['number'] ?></td>
                     <td><?= $row['date']?DateTime::createFromFormat('Y-m-d', $row['date']) -> format('d.m.Y'):$row['date']; ?></td>
@@ -82,16 +82,16 @@ include_once("config.php");
                     <td><?= $row['period_start']?DateTime::createFromFormat('Y-m-d', $row['period_start']) -> format('d.m.Y'):$row['period_start']; ?></td>
                     <td><?= $row['period_stop']?DateTime::createFromFormat('Y-m-d', $row['period_stop']) -> format('d.m.Y'):$row['period_stop']; ?></td>
                     <td>
-                        <a href="flk_protokol_stat_procent_ispravlen.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">ход исправления</a>
+                        <a href="flk_protokol_stat_procent_ispravlen.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">ход исправления</a>
                     </td>
                     <td>
-                        % прохождения <a href="flk_protokol_stat_procent_export.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по документам</a> / <a href="flk_protokol_stat_procent_export_on.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по объектам</a>
+                        % прохождения <a href="flk_protokol_stat_procent_export.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по документам</a> / <a href="flk_protokol_stat_procent_export_on.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">по объектам</a>
                     </td>
                     <td>
-                        <a href="flk_protokol_stat_vid_oshibok.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">виды ошибок</a>
+                        <a href="flk_protokol_stat_vid_oshibok.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">виды ошибок</a>
                     </td>
                     <td>
-                        <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&year=<?= $row['Year'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
+                        <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
                             в EXCEL</a>
                     </td>
                 </tr>

@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <script src="js/jquery.min.js"></script>
 </head>
-<body>
+<h1>Автоматическая загрузка и обработка файлов</h1>
+<p>На этой странице происходит групповая загрузка файлов. Вернуться к списку <a href="index.php">протоколов ФЛК</a>. Перейти к списку <a href="flk_protokol_upload.php">загруженных файлов</a>.</p>
 <?php
 if (isset($_POST['submit'])) {
 
@@ -22,10 +23,11 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+<h2>1. Загрузить файлы во временную папку upload на сервере:</h2>
 <form method='post' action='' enctype='multipart/form-data'>
     <input type="file" name="file[]" id="file" multiple>
 
-    <input type='submit' name='submit' value='Загрузить во временную папку upload на сервере '>
+    <input type='submit' name='submit' value='Загрузить'>
 </form>
 
 <?php
@@ -49,8 +51,13 @@ function search_file($folderName, $fileName)
                 //echo mb_substr($file, -36, 32, 'utf-8'). "<br>";
                 //echo '$fileName='.$fileName. "<br>";
                 $fileName = preg_replace('/-/', '', $fileName);
-                if (mb_substr($file, -36, 32, 'utf-8') == $fileName)
-                    return basename($file); //$folderName."/".$file;
+                //echo $file.' ';
+                //echo $fileName.' ';
+                //echo preg_match('/[a-z0-9]{32}/',$file, $out) ? $out[0] : 'no match';
+                //echo '</br>';
+                //if (mb_substr($file, -36, 32, 'utf-8') == $fileName)
+                if ((preg_match('/[a-z0-9]{32}/',$file, $out) ? $out[0] : 'no match') == $fileName)
+                {return basename($file);}  //$folderName."/".$file;
                 //if(preg_match("/$fileName/i", $file) ) return $folderName."/".$file;
             }
             // если папка, то рекурсивно вызываем search_file
@@ -86,7 +93,6 @@ function outputFiles($path)
 
                     $file_xls = basename($file);
                     //Вычисление id
-
                     //$id=preg_replace('/Протокол_ФЛК_/','', basename($file, ".xls"));
                     $result = preg_match('/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/', basename($file, ".xls"), $match);
                     //var_dump( $result, $match);
@@ -118,7 +124,7 @@ function outputFiles($path)
                 }
             }
         } else {
-            echo "ERROR: No such file found in the directory.";
+            echo "ВНИМАНИЕ: Нет файлов в дирректории upload на сервере.";
         }
 
     } else {
@@ -182,7 +188,7 @@ echo '<form enctype="multipart/form-data" method="POST" name="flk_donwload" acti
 // Call the function
 outputFiles("upload");
 //echo 'Результат поиска:'.search_file("upload", 'aee0f60c-a459-47e6-82c3-40ca99d0fa82');
-echo 'Загрузить выделенные файлы в протокол ';
+echo '<h2>'.'2. Импорт выделенных файлов в протокол:'.'</h2>';
 echo '№ протокола <input required="" type="number" class="number w40" name="number" value="' . $number . '">';
 echo 'Дата создания <input required="" type="date" class="date w130" name="date"  value="' . $date . '">';
 echo 'Начало периода <input required="" type="date" class="date w130" name="period_start"  value="' . $period_start . '">';
@@ -204,7 +210,7 @@ echo 'Тип выгрузки <select class="main" name="type_unloading">
        </select>';
 //echo '<input required="" type="file" class="button fileupload w100pt" name="filexls" accept="application/vnd.ms-excel">';
 //echo '<input required="" type="file" class="button fileupload w100pt" name="filexml" accept="text/xml">';
-echo '<button class="button" type="submit" name="flk_upload_submit" value="add">Добавить</button>';
+echo '<button class="button" type="submit" name="flk_upload_submit" value="add">Импортировать</button>';
 echo '</form >';
 //Обработка выделенных файлов из таблицы
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
