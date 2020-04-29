@@ -1,10 +1,11 @@
 <?php
 // Функция загрузки протокола 
-function flk_fns_protokol_add($link){
-	$tmp_file_fns_xml = $_FILES['filefnsxml']['tmp_name'];
-	$type_file_fns_xml = $_FILES['filefnsxml']['type'];
+function flk_fns_protokol_add($link, $tmp_file_fns_xml){
+	 //if(!isset($tmp_file_fns_xml)){$tmp_file_fns_xml = $_FILES['filefnsxml']['tmp_name'];}
+	//$type_file_fns_xml = $_FILES['filefnsxml']['type'];
 
-	if (file_exists($tmp_file_fns_xml) and $type_file_fns_xml == 'text/xml') 
+	//if (file_exists($tmp_file_fns_xml) and $type_file_fns_xml == 'text/xml')
+	if (file_exists("$tmp_file_fns_xml") and mime_content_type("$tmp_file_fns_xml") === 'application/xml')
 	{
 		$arr_fns_xml = simplexml_load_file($tmp_file_fns_xml);
 		
@@ -48,6 +49,8 @@ function flk_fns_protokol_add($link){
 		}
 		else
 		{
+			global $good_fns;
+			$good_fns=0;
 			//Получаем protokol_id xml файла выгрузки
 			$query_protokol_uid = "SELECT file_name_xml, protokol_id
 				FROM protokol_file  
@@ -80,8 +83,8 @@ function flk_fns_protokol_add($link){
 				$row_error_info = $segment_err_info->attributes();
 				//$error_text = preg_replace('/([#&\[\]\';]+)/', '', $row_error_info["ТекстОш"]);
 				//$error_value = preg_replace('/([#&\[\]\';]+)/', '', $row_error_info["ЗнЭлем"]);
-                $error_text = $row_error_info["ТекстОш"];
-                $error_value = $row_error_info["ЗнЭлем"];
+                $error_text = htmlspecialchars($row_error_info["ТекстОш"], ENT_QUOTES);
+                $error_value = htmlspecialchars($row_error_info["ЗнЭлем"], ENT_QUOTES);
                 $error_poz = $row_error_info["ПолОшЭл"];
 				$error_code=$row_error_info["КодОшибки"];
 				$error_id = $segment_err_info->ИдОш;
@@ -125,7 +128,9 @@ function flk_fns_protokol_add($link){
 				mysqli_query($link, $query_rl_fns) or die ("Error in query: ".$query_rl_fns."<br>".mysqli_error($link));
 
 			}
-	
+			//Сигнал на окончание загрузки и началу переноса файлов в папку storage
+			$good_fns=1;
+			return $good_fns;
 		}
 	}
 	else

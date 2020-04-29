@@ -12,12 +12,12 @@ require_once("matching.php");
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/table.css">
-	<title>Протоколы ФЛК 2 уровня</title>
+	<title>Протоколы ФЛК из ФНС</title>
 </head>
 <body>
 
 <?php
-$title = 'Протоколы ФЛК 2 уровня';
+$title = 'Протоколы ФЛК из ФНС';
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 $query = 'SELECT pff.id AS id, 
             pe.number,
@@ -40,9 +40,9 @@ $query = 'SELECT pff.id AS id,
 	<p>На этой странице размещен список протоколов ФЛК ФНС для организации процесса
 		исправления ошибок путем внесения отметок об их исправлении.<br>
     <h4>
-        <a href="index.php">Протоколы ФЛК 1 уровня</a> /
+        <a href="index.php">Протоколы ФЛК из ЕГРН</a> /
         <a href="flk_protokol_search.php">Поиск сведений о выгрузке ОН по кадастровому номеру</a> /
-        <a href="https://fias.nalog.ru/ExtendedSearchPage.aspx"> Поиск адреса по ФИАС</a>
+        <a href="https://fias.nalog.ru/Search"> Поиск адреса по ФИАС</a>
     </h4>
 	</p>
 
@@ -53,7 +53,7 @@ $query = 'SELECT pff.id AS id,
 			<?php
 			 //показываем ссылку на загрузку протоколов, если наш ip в списке разрешенных
 			if (in_array("$ipaddr", $arr_ip_allow)){
-				echo '<a href="flk_fns_protokol_upload.php">Загрузить</a>';
+				echo '<a href="upload_files_fns.php">Загрузить</a>';
 			}
 			?>
 			</th>

@@ -183,7 +183,7 @@ echo '
 <div class="main">
 	<h1>'.$title.'</h1>
 	<p>
-	На этой странице происходит загрузка <a href="index_fns.php">протоколов ФЛК ФНС</a> для организации процесса исправления ошибок.
+	На этой странице происходит загрузка <a href="index_fns.php">протоколов ФЛК ФНС</a> для организации процесса исправления ошибок. Также доступна <a href="upload_files_fns.php">групповая загрузка файлов из ФНС</a>
 	<br>
 	<details>
 	<summary style="text-decoration: none; cursor: pointer;">
@@ -270,7 +270,7 @@ echo '</pre>
 
 // В зависимости от отправленного запроса (нажатой кнопки) дергаем нужные функции
 if(isset($_POST['flk_fns_upload_submit']) && $_POST['flk_fns_upload_submit'] == "add"){
-	flk_fns_protokol_add($link);
+	flk_fns_protokol_add($link,$_FILES['filefnsxml']['tmp_name']);
 }
 elseif(isset($_GET['flk_fns_del_submit']) && $_GET['flk_fns_del_submit'] == "del"){
 	flk_fns_protokol_delete($link);

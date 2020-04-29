@@ -54,6 +54,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 	<tr class="main">
 		<th class="main">ФЛК 1 уровня</th>
         <th class="main">Статус испр.</th>
+        <th class="main">Вид сведений</th>
 		<th class="main">Протокол от</th>
 		<th class="main">Начало периода</th>
 		<th class="main">Конец периода</th>
@@ -88,6 +89,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
           ELSE  rn.decision_type
         END
          AS decision_type,
+        doc.desc ,
 		pe.id AS id,
 		pe.date,
 		pe.period_start,
@@ -111,6 +113,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 	LEFT JOIN protokol_export pe ON pf.protokol_id=pe.id
 	LEFT JOIN record_list_fns rlf on rl.guid_doc=rlf.error_id
 	LEFT JOIN record_notes_fns rnf on rlf.id = rnf.record_list_id
+    LEFT JOIN vid_dok doc on rl.vid_record_for_export=doc.no
 	WHERE  
 		".$where_search_kn."
 	GROUP BY rl.cad_obj_num, 
@@ -180,6 +183,7 @@ $title = 'Результаты поиска КН "'.$search_kn.'" в прото�
 				}
 				echo '
                 <td class="main">'.$row['decision_type'].'</td>
+                <td class="main">'.$row['desc'].'</td>
 				<td class="main">'.$insert_date.'</td>
 				<td class="main">'.$period_start.'</td>
 				<td class="main">'.$period_stop.'</td>

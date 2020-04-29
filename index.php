@@ -11,14 +11,14 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Протоколы ФЛК исходящей выгрузки</title>
+    <title>Протоколы ФЛК исходящей выгрузки из ЕГРН</title>
 </head>
 <body>
 
 <?php
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 require_once("matching.php");
-$title = 'Протоколы ФЛК исходящей выгрузки';
+$title = 'Протоколы ФЛК исходящей выгрузки из ЕГРН';
 
 $query = 'Select * from protokol_export
         order by Year desc, date desc
@@ -31,9 +31,9 @@ include_once("config.php");
     <p>На этой странице размещен список протоколов ФЛК исходящей выгрузки данных для организации процесса
         исправления ошибок путем внесения отметок об их исправлении.<br>
     <h4>
-        <a href="index_fns.php">Протоколы ФЛК 2 уровня</a> /
+        <a href="index_fns.php">Протоколы ФЛК из ФНС</a> /
         <a href="flk_protokol_search.php">Поиск сведений о выгрузке объекта по кадастровому номеру</a> /
-        <a href="https://fias.nalog.ru/ExtendedSearchPage.aspx"> Поиск адреса по ФИАС</a>
+        <a href="https://fias.nalog.ru/Search"> Поиск адреса по ФИАС</a>
     </h4>
     </p>
 
@@ -44,7 +44,7 @@ include_once("config.php");
                 <?php
                 // показываем ссылку на загрузку протоколов, если наш ip в списке разрешенных
                 if (in_array("$ipaddr", $arr_ip_allow)){
-                    echo '<a href="flk_protokol_upload.php">Загрузить</a>';
+                    echo '<a href="upload_files.php">Загрузить</a>';
                 }
                 ?>
             </th>
