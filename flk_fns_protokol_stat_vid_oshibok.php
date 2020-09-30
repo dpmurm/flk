@@ -94,6 +94,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	WHERE	
 		pff.protokol_id =$protokol_id
 		and rlf.error_id is not null
+        and rlf.date_correct_add is null -- Если от фнс присутствует дата исправления, то ошибка исправлена и не идет в работу
 	GROUP BY error_text 
 	ORDER BY 1,3 desc";
 	//echo $query;

@@ -91,6 +91,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 	WHERE	
 		pff.protokol_id =$protokol_id
 		and rlf.error_id is not null
+        and rlf.date_correct_add is null -- Если от фнс присутствует дата исправления, то ошибка исправлена и не идет в работу
 	GROUP BY    kr.otdel_name, CONCAT(kr.name,' (', kr.region, ':', substr(rl.cad_obj_num,4,2),')')
 	ORDER BY 1";
 	//echo $query;

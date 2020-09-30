@@ -198,6 +198,7 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 		pff.protokol_id =$protokol_id
 		and rlf.error_id is not null -- Чистим пустые строки от пустых xml файлов от ФНС
 		".$where_sel."
+		and rlf.date_correct_add is null -- Если от фнс присутствует дата исправления, то ошибка исправлена и не идет в работу
 		ORDER BY rayon, rl.cad_obj_num, rl.type_object";
 	//print_r($query);
 	

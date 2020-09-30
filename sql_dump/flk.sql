@@ -2,7 +2,7 @@
 -- Хост:                         10.51.118.210
 -- Версия сервера:               5.5.50-MariaDB - mariadb.org binary distribution
 -- Операционная система:         Win64
--- HeidiSQL Версия:              11.0.0.5964
+-- HeidiSQL Версия:              11.0.0.6099
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `protokol_export` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Year_period_start_period_stop_date_type` (`Year`,`period_start`,`period_stop`,`date`,`type`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COMMENT='Список протоколов для передачи в ФНС';
 
 -- Экспортируемые данные не выделены.
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `protokol_file` (
   KEY `FK_protokol_file_protokol_export` (`protokol_id`),
   KEY `vid_object` (`vid_object`),
   CONSTRAINT `FK_protokol_file_protokol_export` FOREIGN KEY (`protokol_id`) REFERENCES `protokol_export` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1304 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
+) ENGINE=InnoDB AUTO_INCREMENT=1475 DEFAULT CHARSET=utf8 COMMENT='Соответствие протокола и его файлов';
 
 -- Экспортируемые данные не выделены.
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `protokol_file_fns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idfile_fns_xml` (`idfile_fns_xml`),
   KEY `protokol_id` (`protokol_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=444 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=479 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `record_list` (
   KEY `type_object` (`type_object`),
   KEY `cad_obj_num` (`cad_obj_num`),
   KEY `error_type` (`error_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=2181613 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
+) ENGINE=InnoDB AUTO_INCREMENT=2453687 DEFAULT CHARSET=utf8 COMMENT='Записи протокола';
 
 -- Экспортируемые данные не выделены.
 
@@ -119,11 +119,16 @@ CREATE TABLE IF NOT EXISTS `record_list_fns` (
   `error_code` varchar(100) NOT NULL COMMENT 'Код ошибки по системе ФНС',
   `error_text` varchar(300) NOT NULL,
   `error_id` varchar(100) NOT NULL,
-  `protokol_file_fns_id` varchar(32) NOT NULL DEFAULT '0' COMMENT 'Ссылка на id таблицы PROTOKOL_FILE_FNS',
+  `protokol_file_fns_id` varchar(32) DEFAULT '0' COMMENT 'Ссылка на id таблицы PROTOKOL_FILE_FNS',
+  `file_frs_name_add` varchar(100) DEFAULT NULL COMMENT 'Доп поле для импорта EXCEL от ФНС по СВЕРКЕ',
+  `cad_num_add` varchar(20) DEFAULT NULL COMMENT 'Для сверки',
+  `vid_obj_add` varchar(50) DEFAULT NULL,
+  `categor_error_add` varchar(100) DEFAULT NULL,
+  `date_correct_add` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `protokol_uid` (`protokol_file_fns_id`),
   KEY `error_id` (`error_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6148 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9241 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 
@@ -142,7 +147,7 @@ CREATE TABLE IF NOT EXISTS `record_notes` (
   KEY `id` (`id`),
   KEY `decision_type` (`decision_type`),
   CONSTRAINT `FK_record_notes_record_list` FOREIGN KEY (`record_list_id`) REFERENCES `record_list` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21307 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=24219 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 
@@ -159,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `record_notes_fns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `record_list_id` (`record_list_id`),
   CONSTRAINT `record_notes_fns_ibfk_1` FOREIGN KEY (`record_list_id`) REFERENCES `record_list_fns` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2113 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
+) ENGINE=InnoDB AUTO_INCREMENT=4120 DEFAULT CHARSET=utf8 COMMENT='Информация об исправлениях';
 
 -- Экспортируемые данные не выделены.
 
