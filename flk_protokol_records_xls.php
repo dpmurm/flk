@@ -3,7 +3,7 @@ header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
 header("Content-Disposition: attachment; filename=protokol.xls");  //File name extension was wrong
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Cache-Control: private",false);
+header("Cache-Control: private", false);
 //header("Content-Type: application/vnd.ms-excel");
 date_default_timezone_set("Europe/Moscow");
 if (isset($_GET['protokol_id'])) {
@@ -17,7 +17,7 @@ if (isset($_GET['number'])) {
     $number = 0;
 }
 if (isset($_GET['date'])) {
-    $date = $_GET['date']?DateTime::createFromFormat('Y-m-d', $_GET['date']) -> format('d.m.Y'):$_GET['date'] ; // Если нет номера отдела берется 0
+    $date = $_GET['date'] ? DateTime::createFromFormat('Y-m-d', $_GET['date'])->format('d.m.Y') : $_GET['date']; // Если нет номера отдела берется 0
 } else {
     $date = 0;
 }
@@ -40,16 +40,16 @@ if (isset($_GET['period_stop'])) {
     <title>ИСПОЛНЕНО</title>
 </head>
 <body>
-   <!-- <h2><font color=red>Протокол передачи сведений в ФНС <?=$date?> номер <?=$number?> за период с <?=$period_start?> по <?=$period_stop?></font></h2>-->
+<!-- <h2><font color=red>Протокол передачи сведений в ФНС <?= $date ?> номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?></font></h2>-->
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <tr>
-        <th >Решение</th>
-        <th >№ пп</th>
-        <th >Район</th>
-        <th >Кадастровый№</th>
-        <th >Вид объекта</th>
-        <th >Описание ошибки ФЛК</th>
-        <th >Местонахождение ошибки в XML файле</th>
+        <th>Решение</th>
+        <th>№ пп</th>
+        <th>Район</th>
+        <th>Кадастровый№</th>
+        <th>Вид объекта</th>
+        <th>Описание ошибки ФЛК</th>
+        <th>Местонахождение ошибки в XML файле</th>
         <th>Наименование атрибута</th>
         <th>Значение атрибута</th>
         <th>Вид сведений</th>
@@ -59,7 +59,7 @@ if (isset($_GET['period_stop'])) {
 
     include_once("config.php");
 
-$query="select rl.id,
+    $query = "select rl.id,
 substr(rl.cad_obj_num, 4, 2) rayon,
 rl.cad_obj_num, rl.type_object, 
 rl.error_text, rl.error_path_xml, rl.atribut_name, rl.atribut_value, rl.error_type,
@@ -80,28 +80,28 @@ where
 rl.status!='Прошел флк'
 and pe.id='$protokol_id'
 order by 2, 4";
-//echo $query;
+    //echo $query;
 
-        if ($result = mysqli_query($link, $query)) {
-            $k=0;
-            while ($row = mysqli_fetch_assoc($result)) {
-                $k=$k+1;
-                ?>
-                <tr>
-                    <td ><?php echo $row['reshenie']; ?></td>
-                    <td><?= $k ?></td>
-                    <td ><?php echo $row['rayon']; ?></td>
-                    <td><?php echo $row['cad_obj_num']; ?></td>
-                    <td><?php echo $row['type_object']; ?></td>
-                    <td><?php echo $row['error_text']; ?></td>
-                    <td><?php echo $row['error_path_xml']; ?></td>
-                    <td><?php echo $row['atribut_name']; ?></td>
-                    <td><?php echo $row['atribut_value']; ?></td>
-                    <td><?php echo $row['error_type']; ?></td>
-                </tr>
-                <?php
-            }
+    if ($result = mysqli_query($link, $query)) {
+        $k = 0;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $k = $k + 1;
+            ?>
+            <tr>
+                <td><?php echo $row['reshenie']; ?></td>
+                <td><?= $k ?></td>
+                <td><?php echo $row['rayon']; ?></td>
+                <td><?php echo $row['cad_obj_num']; ?></td>
+                <td><?php echo $row['type_object']; ?></td>
+                <td><?php echo $row['error_text']; ?></td>
+                <td><?php echo $row['error_path_xml']; ?></td>
+                <td><?php echo $row['atribut_name']; ?></td>
+                <td><?php echo $row['atribut_value']; ?></td>
+                <td><?php echo $row['error_type']; ?></td>
+            </tr>
+            <?php
         }
+    }
 
     mysqli_free_result($result);
     mysqli_close($link);

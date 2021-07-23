@@ -18,8 +18,8 @@ function flk_records_note_form_insert($link)
             if (!get_magic_quotes_gpc()) {
                 $record_list_id = $_GET['record_list_id'];
                 $decision_type = $_GET['decision_type'];
-                $reg_no = mysqli_escape_string($link, $_GET['reg_no']);
-                $text = mysqli_escape_string($link, $_GET['text']);
+                $reg_no = mysqli_real_escape_string($link, $_GET['reg_no']);
+                $text = mysqli_real_escape_string($link, $_GET['text']);
             };
 
             $query = "";
@@ -68,7 +68,6 @@ function flk_records_note_form_cancel($link)
 		</script>';
 }
 
-?>
 
 
 

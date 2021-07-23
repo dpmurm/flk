@@ -6,7 +6,8 @@
     <script src="js/jquery.min.js"></script>
 </head>
 <h1>Автоматическая загрузка и обработка файлов из ФНС</h1>
-<p>На этой странице происходит групповая загрузка файлов из ФНС. Вернуться к списку <a href="index_fns.php">протоколов ФЛК из ФНС</a>. Перейти к списку <a href="flk_fns_protokol_upload.php">загруженных файлов из ФНС</a>.</p>
+<p>На этой странице происходит групповая загрузка файлов из ФНС. Вернуться к списку <a href="index_fns.php">протоколов
+        ФЛК из ФНС</a>. Перейти к списку <a href="flk_fns_protokol_upload.php">загруженных файлов из ФНС</a>.</p>
 <?php
 if (isset($_POST['submit'])) {
 
@@ -106,7 +107,7 @@ function outputFiles($path)
                     if (!$kodirovka) {
                         $file_xls = iconv('windows-1251', 'UTF-8', $file_xls);
                     }
-                    echo '<td><input type="checkbox" name="files[]" value="' . $file_xls. '" /></td>';
+                    echo '<td><input type="checkbox" name="files[]" value="' . $file_xls . '" /></td>';
                     echo "<td>";
                     // Display only filename
                     echo '<a href="' . $path . '/' . $file_xls . '" title="скачать файл"> ' . rawurldecode($file_xls) . '</a> ';
@@ -190,7 +191,7 @@ echo '<form enctype="multipart/form-data" method="POST" name="flk_donwload" acti
 // Call the function
 outputFiles("upload_fns");
 //echo 'Результат поиска:'.search_file("upload", 'aee0f60c-a459-47e6-82c3-40ca99d0fa82');
-echo '<h2>'.'2. Импорт выделенных файлов в протокол:'.'</h2>';
+echo '<h2>' . '2. Импорт выделенных файлов в протокол:' . '</h2>';
 //echo '№ протокола <input required="" type="number" class="number w40" name="number" value="' . $number . '">';
 //echo 'Дата создания <input required="" type="date" class="date w130" name="date"  value="' . $date . '">';
 //echo 'Начало периода <input required="" type="date" class="date w130" name="period_start"  value="' . $period_start . '">';
@@ -219,7 +220,7 @@ echo '</form >';
 //Обработка выделенных файлов из таблицы
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (isset($_POST['flk_fns_upload_submit']) and $_POST['flk_fns_upload_submit'] === 'add' and !empty($_POST['files']) ) {
+if (isset($_POST['flk_fns_upload_submit']) and $_POST['flk_fns_upload_submit'] === 'add' and !empty($_POST['files'])) {
     echo 'Информация по обработке файлов' . "<br>";
     //print_r($_POST);
     //Подгружаем функцию загрузки function flk_protokol_parsing()
@@ -233,38 +234,40 @@ if (isset($_POST['flk_fns_upload_submit']) and $_POST['flk_fns_upload_submit'] =
     foreach ($_POST['files'] as $file) {
         //list($xls, $xml) = explode("||", $file);
         //echo 'xls:' . $xls . '; xml:' . $xml . "<br>";
-        echo 'xml:' .$file;
+        echo 'xml:' . $file;
 
-        if ( urlencode(urldecode($file)) === $file){
+        if (urlencode(urldecode($file)) === $file) {
             //echo 'string urlencoded';
             $file_xls = urldecode($file);
         } else {
             //echo 'string is NOT urlencoded';
-            $file_xls=$file;
+            $file_xls = $file;
         }
-       // if( preg_match("/%/", $xls) ) {
+        // if( preg_match("/%/", $xls) ) {
         //    $file_xls = urldecode($xls);
-       // } else {$file_xls =$xls;}
+        // } else {$file_xls =$xls;}
 
         $kodirovka2 = mb_detect_encoding($file, 'UTF-8', TRUE);
         //Если кодировка UTF-8 возвращаем родную для винды
-        if ($kodirovka2) {$tmp_file_xls = iconv('UTF-8','windows-1251', $file);}
+        if ($kodirovka2) {
+            $tmp_file_xls = iconv('UTF-8', 'windows-1251', $file);
+        }
 
         if (file_exists("upload_fns/$tmp_file_xls")) {
             $tmp_file_xls = "upload_fns/$tmp_file_xls";
         } else {
             echo 'Файл не найден: ' . "upload_fns/$tmp_file_xls";
         }
-       // $file_xml = $xml;
+        // $file_xml = $xml;
 
         //Загрузка
         flk_fns_protokol_add($link, $tmp_file_xls);
         //function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
         //flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, 1, $type_unloading, 0, 0, $file_xls, $tmp_file_xls, $file_xml);
-        if ($good_fns===1){
+        if ($good_fns === 1) {
             //Кодировка win1251 для сохранения в системе виндовс
             //$type_unloading_save = iconv('utf-8', 'windows-1251', $type_unloading);
-            $date=date("d.m.Y");
+            $date = date("d.m.Y");
             //Перемещение xls файлов
             if (file_exists("upload_fns/$file") && file_exists("storage_fns/$date")) {
                 $text_xls = iconv('utf-8', 'windows-1251', urldecode($file));

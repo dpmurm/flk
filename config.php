@@ -9,6 +9,7 @@ $arr_ip_allow = array(
 );
 
 //$doc_root = $_SERVER["DOCUMENT_ROOT"]."/";
+$ipaddr = $_SERVER['REMOTE_ADDR'];
 $host = $_SERVER['HTTP_HOST'];
 $site = basename(__DIR__);
 

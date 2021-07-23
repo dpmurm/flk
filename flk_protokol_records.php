@@ -33,68 +33,43 @@ if (isset($_GET['period_stop'])) {
     $period_stop = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-if (isset($_GET['protokol_id']))
-{
+if (isset($_GET['protokol_id'])) {
     $protokol_id = $_SESSION['fpr']['protokol_id'] = $_GET['protokol_id'];
-}
-elseif (isset($_SESSION['fpr']['protokol_id']))
-{
+} elseif (isset($_SESSION['fpr']['protokol_id'])) {
     $protokol_id = $_SESSION['fpr']['protokol_id'];
-}
-else
-{
+} else {
     $protokol_id = 0;
 }
 
-if (isset($_GET['id']))
-{
+if (isset($_GET['id'])) {
     $id = $_SESSION['fpr']['id'] = $_GET['id'];
-}
-elseif (isset($_SESSION['fpr']['id']))
-{
+} elseif (isset($_SESSION['fpr']['id'])) {
     $id = $_SESSION['fpr']['id'];
-}
-else
-{
+} else {
     $id = 0;
 }
 
-if (isset($_GET['sel_rayon'])  )
-{
+if (isset($_GET['sel_rayon'])) {
     $sel_rayon = $_SESSION['fpr']['sel_rayon'] = $_GET['sel_rayon'];
-}
-elseif (isset($_SESSION['fpr']['sel_rayon'])  && is_numeric($_SESSION['fpr']['sel_rayon']))
-{
+} elseif (isset($_SESSION['fpr']['sel_rayon']) && is_numeric($_SESSION['fpr']['sel_rayon'])) {
     $sel_rayon = $_SESSION['fpr']['sel_rayon'];
-}
-else
-{
+} else {
     $sel_rayon = "-1";
 }
 
-if (isset($_GET['sel_reshenie'])  && is_numeric($_GET['sel_reshenie']))
-{
+if (isset($_GET['sel_reshenie']) && is_numeric($_GET['sel_reshenie'])) {
     $sel_reshenie = $_SESSION['fpr']['sel_reshenie'] = $_GET['sel_reshenie'];
-}
-elseif (isset($_SESSION['fpr']['sel_reshenie'])  && is_numeric($_SESSION['fpr']['sel_reshenie']))
-{
+} elseif (isset($_SESSION['fpr']['sel_reshenie']) && is_numeric($_SESSION['fpr']['sel_reshenie'])) {
     $sel_reshenie = $_SESSION['fpr']['sel_reshenie'];
-}
-else
-{
+} else {
     $sel_reshenie = "-1";
 }
 
-if (isset($_GET['sel_vid_object']))
-{
+if (isset($_GET['sel_vid_object'])) {
     $sel_vid_object = $_SESSION['fpr']['sel_vid_object'] = $_GET['sel_vid_object'];
-}
-elseif (isset($_SESSION['fpr']['sel_vid_object']))
-{
+} elseif (isset($_SESSION['fpr']['sel_vid_object'])) {
     $sel_vid_object = $_SESSION['fpr']['sel_vid_object'];
-}
-else
-{
+} else {
     $sel_vid_object = "-1";
 }
 //echo $sel_vid_object;
@@ -115,7 +90,9 @@ else
 
 <body>
 
-<h2><font color=red>Протокол передачи сведений в ФНС<!-- <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?>--></font></h2>
+<h2><font color=red>Протокол передачи сведений в ФНС
+        <!-- <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?>--></font>
+</h2>
 <br> Вернуться к <a href="index.php">протоколам ФЛК</a><br>
 
 <form method="GET" name="select_rayon" action="?">
@@ -124,51 +101,43 @@ else
         <?php
         // Список районов
         $rayon_result = mysqli_query($link, 'SELECT number,name, region FROM `kad_rayon` order by region, number');
-        while($row = mysqli_fetch_assoc($rayon_result)){
-            $arr_rayon[$row['region'].":".$row['number']] = $row['name'];
+        while ($row = mysqli_fetch_assoc($rayon_result)) {
+            $arr_rayon[$row['region'] . ":" . $row['number']] = $row['name'];
         }
         //asort($arr_rayon);
-        foreach ($arr_rayon as $number_rayon => $name_rayon){
-            if (isset($sel_rayon) && $sel_rayon == $number_rayon)
-            {
-                echo '<option value="'.$number_rayon.'" selected>'.$name_rayon.' ('.$number_rayon.')</option>';
-            }
-            else
-            {
-                echo '<option value="'.$number_rayon.'">'.$name_rayon.' ('.$number_rayon.')</option>';
+        foreach ($arr_rayon as $number_rayon => $name_rayon) {
+            if (isset($sel_rayon) && $sel_rayon == $number_rayon) {
+                echo '<option value="' . $number_rayon . '" selected>' . $name_rayon . ' (' . $number_rayon . ')</option>';
+            } else {
+                echo '<option value="' . $number_rayon . '">' . $name_rayon . ' (' . $number_rayon . ')</option>';
             }
         }
         ?>
     </select>&nbsp;
     <select class="main" name="sel_reshenie">
-        <option value="-1">Статус не выбран</option>';
+        <option value="-1">Статус не выбран</option>
+        ';
         <?php
         // Список решений
-        foreach ($arr_reshenie as $number_reshenie => $name_reshenie){
-            if (isset($sel_reshenie) && $sel_reshenie == $number_reshenie)
-            {
-                echo '<option value="'.$number_reshenie.'" selected>'.$name_reshenie.'</option>';
-            }
-            else
-            {
-                echo '<option value="'.$number_reshenie.'">'.$name_reshenie.'</option>';
+        foreach ($arr_reshenie as $number_reshenie => $name_reshenie) {
+            if (isset($sel_reshenie) && $sel_reshenie == $number_reshenie) {
+                echo '<option value="' . $number_reshenie . '" selected>' . $name_reshenie . '</option>';
+            } else {
+                echo '<option value="' . $number_reshenie . '">' . $name_reshenie . '</option>';
             }
         }
         ?>
     </select>
-    <select class="main" name="sel_vid_object" >
+    <select class="main" name="sel_vid_object">
         <option value="-1">Все объекты</option>
 
         <?php
         // Вид объекта
-        foreach ($arr_vid_object as $number_vid_object => $name_vid_object){
-            if (isset($sel_vid_object) && $sel_vid_object == $number_vid_object)
-            {
-                echo '<option value="'.$number_vid_object.'" selected>'.$name_vid_object.'</option>';
-            }
-            else
-            {
-                echo '<option value="'.$number_vid_object.'">'.$name_vid_object.'</option>';
+        foreach ($arr_vid_object as $number_vid_object => $name_vid_object) {
+            if (isset($sel_vid_object) && $sel_vid_object == $number_vid_object) {
+                echo '<option value="' . $number_vid_object . '" selected>' . $name_vid_object . '</option>';
+            } else {
+                echo '<option value="' . $number_vid_object . '">' . $name_vid_object . '</option>';
             }
         }
         ?>
@@ -180,20 +149,16 @@ else
 //Условия фильтра
 $where_sel = "";
 
-if ($sel_rayon >= 0)
-{
-    $where_sel .= " AND rl.cad_obj_num LIKE '".$sel_rayon.":%'";
+if ($sel_rayon >= 0) {
+    $where_sel .= " AND rl.cad_obj_num LIKE '" . $sel_rayon . ":%'";
 }
-if ($sel_reshenie >= 0)
-{
-    $where_sel .= " AND ifnull(rn.decision_type,0) = '".$sel_reshenie."'";
+if ($sel_reshenie >= 0) {
+    $where_sel .= " AND ifnull(rn.decision_type,0) = '" . $sel_reshenie . "'";
 }
-if ($sel_vid_object == 'ЗУ')
-{
+if ($sel_vid_object == 'ЗУ') {
     $where_sel .= " AND rl.type_object = 'Земельный участок'";
 }
-if ($sel_vid_object == 'ОКС')
-{
+if ($sel_vid_object == 'ОКС') {
     $where_sel .= " AND (rl.type_object = 'Здание/Сооружение' OR rl.type_object = 'Помещение')";
 }
 //Конец фильтра
@@ -202,12 +167,10 @@ if ($sel_vid_object == 'ОКС')
 <?php
 // показываем ссылку на список КН, если наш ip в списке разрешенных
 $ipaddr = $_SERVER['REMOTE_ADDR'];
-if (in_array("$ipaddr", $arr_ip_allow))
-{
+if (in_array("$ipaddr", $arr_ip_allow)) {
     echo '<a href="?show_kn=1">Список КН</a><br>';
 }
-if (isset($_GET['show_kn']) && $_GET['show_kn'] == 1)
-{
+if (isset($_GET['show_kn']) && $_GET['show_kn'] == 1) {
     show_kn($link, $protokol_id, $where_sel);
 }
 ?>
@@ -261,8 +224,9 @@ order by 2, 4";
             $k = $k + 1;
             ?>
             <tr>
-
-                <td id="<?php echo $row['id']; ?>"><a href="flk_records_note_form.php?record_id=<?= $row['id']; ?>&protokol_id=<?= $protokol_id; ?>"><?php echo $row['reshenie']; ?></a></td>
+                <td id="<?php echo $row['id']; ?>"><a
+                            href="flk_records_note_form.php?record_id=<?= $row['id']; ?>&protokol_id=<?= $protokol_id; ?>"><?php echo $row['reshenie']; ?></a>
+                </td>
                 <td><?= $k ?></td>
                 <td><?php echo $row['rayon']; ?></td>
                 <td><?php echo $row['cad_obj_num']; ?></td>

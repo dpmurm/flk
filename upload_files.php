@@ -6,7 +6,8 @@
     <script src="js/jquery.min.js"></script>
 </head>
 <h1>Автоматическая загрузка и обработка файлов</h1>
-<p>На этой странице происходит групповая загрузка файлов. Вернуться к списку <a href="index.php">протоколов ФЛК</a>. Перейти к списку <a href="flk_protokol_upload.php">загруженных файлов</a>.</p>
+<p>На этой странице происходит групповая загрузка файлов. Вернуться к списку <a href="index.php">протоколов ФЛК</a>.
+    Перейти к списку <a href="flk_protokol_upload.php">загруженных файлов</a>.</p>
 <?php
 if (isset($_POST['submit'])) {
 
@@ -39,36 +40,17 @@ if (isset($_POST['submit'])) {
  * @param string $folderName - пусть до папки
  * @param string $fileName - искомый файл
  */
+// Поиск XML файла по папке и ID
 function search_file($folderName, $fileName)
 {
-    // открываем текущую папку
-    $dir = opendir($folderName);
-    // перебираем папку
-    while (($file = readdir($dir)) !== false) { // перебираем пока есть файлы
-        if ($file != "." && $file != "..") { // если это не папка
-            if (is_file($folderName . "/" . $file)) { // если файл проверяем имя
-                // если имя файла нужное, то вернем путь до него
-                //echo mb_substr($file, -36, 32, 'utf-8'). "<br>";
-                //echo '$fileName='.$fileName. "<br>";
-                $fileName = preg_replace('/-/', '', $fileName);
-                //echo $file.' ';
-                //echo $fileName.' ';
-                //echo preg_match('/[a-z0-9]{32}/',$file, $out) ? $out[0] : 'no match';
-                //echo '</br>';
-                //if (mb_substr($file, -36, 32, 'utf-8') == $fileName)
-                if ((preg_match('/[a-z0-9]{32}/',$file, $out) ? $out[0] : 'no match') == $fileName)
-                {return basename($file);}  //$folderName."/".$file;
-                //if(preg_match("/$fileName/i", $file) ) return $folderName."/".$file;
-            }
-            // если папка, то рекурсивно вызываем search_file
-            if (is_dir($folderName . "/" . $file)) return search_file($folderName . "/" . $file, $fileName);
-        }
-    }
-    // закрываем папку
-    closedir($dir);
+    $fileName = preg_replace('/-/', '', $fileName);
+    //echo $fileName.' '; //id из EXCEL очищенные от - дефисов
+    // ищем в папке XML файлы с ID в конце файла
+    $xml_file = glob("$folderName/*$fileName.{xml,XML}", GLOB_BRACE);
+    return !empty($xml_file) ? basename($xml_file[0]) : "";
 }
 
-// Define a function to output files in a directory
+// Рисуем таблицу с XML файлами
 function outputFiles($path)
 {
     echo '
@@ -95,7 +77,7 @@ function outputFiles($path)
                     //Вычисление id
                     //$id=preg_replace('/Протокол_ФЛК_/','', basename($file, ".xls"));
                     $result = preg_match('/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/', basename($file, ".xls"), $match);
-                    //var_dump( $result, $match);
+                    //var_dump( $match);
                     $id = $match[0];
                     //echo '$id='.$id. "<br>";
                     $file_xml = search_file("upload", $id);
@@ -113,7 +95,7 @@ function outputFiles($path)
                     ////////////////////////////////////////////////////////////////////////
                     echo "</td>";
                     echo "<td>";
-                    echo '<a href="' . $path . '/' . $file_xml . '" title="скачать файл"> ' . $file_xml . '</a> ' . "<br>";
+                    echo '<a href="' . $path .  '/' . $file_xml . '" title="скачать файл"> ' . $file_xml . '</a> ' . "<br>";
                     echo "</td>";
                     ///////////////////////////////////////////////////////////////////////////
                     echo "</tr>";
@@ -188,7 +170,7 @@ echo '<form enctype="multipart/form-data" method="POST" name="flk_donwload" acti
 // Call the function
 outputFiles("upload");
 //echo 'Результат поиска:'.search_file("upload", 'aee0f60c-a459-47e6-82c3-40ca99d0fa82');
-echo '<h2>'.'2. Импорт выделенных файлов в протокол:'.'</h2>';
+echo '<h2>' . '2. Импорт выделенных файлов в протокол:' . '</h2>';
 echo '№ протокола <input required="" type="number" class="number w40" name="number" value="' . $number . '">';
 echo 'Дата создания <input required="" type="date" class="date w130" name="date"  value="' . $date . '">';
 echo 'Начало периода <input required="" type="date" class="date w130" name="period_start"  value="' . $period_start . '">';
@@ -223,7 +205,7 @@ if (isset($_POST['flk_upload_submit']) and $_POST['flk_upload_submit'] === 'add'
     //Подгружаем $link
     require_once("config.php");
     require_once('matching.php');
-    require_once ('PHPExcel/PHPExcel.php');
+    require_once('PHPExcel/PHPExcel.php');
 
 
     foreach ($_POST['files'] as $file) {
@@ -231,20 +213,22 @@ if (isset($_POST['flk_upload_submit']) and $_POST['flk_upload_submit'] === 'add'
         echo 'xls:' . $xls . '; xml:' . $xml . "<br>";
 
 
-        if ( urlencode(urldecode($xls)) === $xls){
+        if (urlencode(urldecode($xls)) === $xls) {
             //echo 'string urlencoded';
             $file_xls = urldecode($xls);
         } else {
             //echo 'string is NOT urlencoded';
-            $file_xls =$xls;
+            $file_xls = $xls;
         }
-       // if( preg_match("/%/", $xls) ) {
+        // if( preg_match("/%/", $xls) ) {
         //    $file_xls = urldecode($xls);
-       // } else {$file_xls =$xls;}
+        // } else {$file_xls =$xls;}
 
         $kodirovka2 = mb_detect_encoding($xls, 'UTF-8', TRUE);
         //Если кодировка UTF-8 возвращаем родную для винды
-        if ($kodirovka2) {$tmp_file_xls = iconv('UTF-8','windows-1251', $xls);}
+        if ($kodirovka2) {
+            $tmp_file_xls = iconv('UTF-8', 'windows-1251', $xls);
+        }
 
         if (file_exists("upload/$tmp_file_xls")) {
             $tmp_file_xls = "upload/$tmp_file_xls";
@@ -256,7 +240,7 @@ if (isset($_POST['flk_upload_submit']) and $_POST['flk_upload_submit'] === 'add'
         //Загрузка
         //function flk_protokol_parsing($link, $arr_xls_heads,$number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
         flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, 1, $type_unloading, 0, 0, $file_xls, $tmp_file_xls, $file_xml);
-        if ($good===1){
+        if ($good === 1) {
             //Кодировка win1251 для сохранения в системе виндовс
             $type_unloading_save = iconv('utf-8', 'windows-1251', $type_unloading);
             //Перемещение xls файлов

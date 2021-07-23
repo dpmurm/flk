@@ -11,17 +11,17 @@ if (isset($_GET['number'])) {
     $number = 0;
 }
 if (isset($_GET['date'])) {
-    $date = $_GET['date']?DateTime::createFromFormat('Y-m-d', $_GET['date']) -> format('d.m.Y'):$_GET['date'] ; // Если нет номера отдела берется 0
+    $date = $_GET['date'] ? DateTime::createFromFormat('Y-m-d', $_GET['date'])->format('d.m.Y') : $_GET['date']; // Если нет номера отдела берется 0
 } else {
     $date = 0;
 }
 if (isset($_GET['period_start'])) {
-    $period_start =$_GET['period_start']?DateTime::createFromFormat('Y-m-d', $_GET['period_start']) -> format('d.m.Y'):$_GET['period_start'] ; // Если нет номера отдела берется 0
+    $period_start = $_GET['period_start'] ? DateTime::createFromFormat('Y-m-d', $_GET['period_start'])->format('d.m.Y') : $_GET['period_start']; // Если нет номера отдела берется 0
 } else {
     $period_start = 0;
 }
 if (isset($_GET['period_stop'])) {
-    $period_stop = $_GET['period_stop']?DateTime::createFromFormat('Y-m-d', $_GET['period_stop']) -> format('d.m.Y'):$_GET['period_stop']; // Если нет номера отдела берется 0
+    $period_stop = $_GET['period_stop'] ? DateTime::createFromFormat('Y-m-d', $_GET['period_stop'])->format('d.m.Y') : $_GET['period_stop']; // Если нет номера отдела берется 0
 } else {
     $period_stop = 0;
 }
@@ -36,7 +36,8 @@ if (isset($_GET['period_stop'])) {
 </head>
 
 <body>
-<h2><font color=red>Процент прохождения сведений в ФНС по документам по протоколу от <?= $date ?> номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
+<h2><font color=red>Процент прохождения сведений в ФНС по документам по протоколу от <?= $date ?> номер <?= $number ?>
+        за период с <?= $period_start ?> по <?= $period_stop ?> </font></h2>
 
 
 <table width="60%" border="1" cellspacing="0" cellpadding="0">

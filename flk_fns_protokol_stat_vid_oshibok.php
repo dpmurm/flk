@@ -5,17 +5,12 @@ require_once("functions/fn_misc.php");
 
 date_default_timezone_set("Europe/Moscow");
 
-if (isset($_GET['protokol_id']))
-{
-	$protokol_id = $_SESSION['fps']['protokol_id'] = $_GET['protokol_id'];
-} 
-elseif (isset($_SESSION['fps']['protokol_id']))
-{
-	$protokol_id = $_SESSION['fps']['protokol_id'];
-}
-else 
-{
-	$protokol_id = 0;
+if (isset($_GET['protokol_id'])) {
+    $protokol_id = $_SESSION['fps']['protokol_id'] = $_GET['protokol_id'];
+} elseif (isset($_SESSION['fps']['protokol_id'])) {
+    $protokol_id = $_SESSION['fps']['protokol_id'];
+} else {
+    $protokol_id = 0;
 }
 
 // Получаем период выгрузки
@@ -30,28 +25,28 @@ $period_start = $arr_period['period_start'];
 $period_stop = $arr_period['period_stop'];
 
 // Преобразуем формат даты для удобного отображения
-if($formated_date = DateTime::createFromFormat('Y-m-d', $period_start)){
-	$period_start = DateTime::createFromFormat('Y-m-d', $period_start) -> format('d.m.Y');
-}else{
-	$period_start = '';
+if ($formated_date = DateTime::createFromFormat('Y-m-d', $period_start)) {
+    $period_start = DateTime::createFromFormat('Y-m-d', $period_start)->format('d.m.Y');
+} else {
+    $period_start = '';
 }
 
-if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
-	$period_stop = DateTime::createFromFormat('Y-m-d', $period_stop) -> format('d.m.Y');
-}else{
-	$period_stop = '';
+if ($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)) {
+    $period_stop = DateTime::createFromFormat('Y-m-d', $period_stop)->format('d.m.Y');
+} else {
+    $period_stop = '';
 }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="css/table.css">
-	<title>Виды ошибок протокола ФЛК ФНС</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/table.css">
+    <title>Виды ошибок протокола ФЛК ФНС</title>
 </head>
 
 <body>
@@ -60,23 +55,23 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
 <br> Вернуться к <a href="index_fns.php">протоколам ФЛК ФНС</a><br><br>
 
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
-	<tr>
-		<th>Описание ошибки ФЛК</th>
-		<th>Всего кол-во записей</th>
-		<th>Земля</th>
-		<th>Здание/ Сооружение</th>
-		<th>Помещение</th>
-		<th>Не обработано</th>
-		<th>В работе</th>
-		<th>Исправлено</th>
-		<th>Невозможно исправить</th>
-		<th>Не обнаружено</th>
-	</tr>
-	<?php
+    <tr>
+        <th>Описание ошибки ФЛК</th>
+        <th>Всего кол-во записей</th>
+        <th>Земля</th>
+        <th>Здание/ Сооружение</th>
+        <th>Помещение</th>
+        <th>Не обработано</th>
+        <th>В работе</th>
+        <th>Исправлено</th>
+        <th>Невозможно исправить</th>
+        <th>Не обнаружено</th>
+    </tr>
+    <?php
 
-	require_once("config.php");
+    require_once("config.php");
 
-	$query = "SELECT 
+    $query = "SELECT 
 		rlf.error_text AS error_text, 
 	COUNT(rlf.id) as vsego,
 	SUM(IF ( rl.type_object = 'Земельный участок', 1, 0)) AS zu,
@@ -97,33 +92,33 @@ if($formated_date = DateTime::createFromFormat('Y-m-d', $period_stop)){
         and rlf.date_correct_add is null -- Если от фнс присутствует дата исправления, то ошибка исправлена и не идет в работу
 	GROUP BY error_text 
 	ORDER BY 1,3 desc";
-	//echo $query;
+    //echo $query;
 
-	if ($result = mysqli_query($link, $query)) {
+    if ($result = mysqli_query($link, $query)) {
 
-		while ($row = mysqli_fetch_assoc($result)) {
+        while ($row = mysqli_fetch_assoc($result)) {
 
-			?>
-			<tr class="hover">
-				<td><?php echo $row['error_text']; ?></td>
-				<td><?php echo $row['vsego']; ?></td>
-				<td><?php echo $row['zu']; ?></td>
-				<td><?php echo $row['zd_sooruz']; ?></td>
-				<td><?php echo $row['pom']; ?></td>
-				<td><?php echo $row['ne_obrabot']; ?></td>
-				<td><?php echo $row['v_rabote']; ?></td>
-				<td><?php echo $row['ispravlena']; ?></td>
-				<td><?php echo $row['nevozm_isprav']; ?></td>
-				<td><?php echo $row['ne_obnaruz']; ?></td>
-			</tr>
-			<?php
-		}
-	}
+            ?>
+            <tr class="hover">
+                <td><?php echo $row['error_text']; ?></td>
+                <td><?php echo $row['vsego']; ?></td>
+                <td><?php echo $row['zu']; ?></td>
+                <td><?php echo $row['zd_sooruz']; ?></td>
+                <td><?php echo $row['pom']; ?></td>
+                <td><?php echo $row['ne_obrabot']; ?></td>
+                <td><?php echo $row['v_rabote']; ?></td>
+                <td><?php echo $row['ispravlena']; ?></td>
+                <td><?php echo $row['nevozm_isprav']; ?></td>
+                <td><?php echo $row['ne_obnaruz']; ?></td>
+            </tr>
+            <?php
+        }
+    }
 
-	mysqli_free_result($result);
-	mysqli_close($link);
-	clear_url();
-	?>
+    mysqli_free_result($result);
+    mysqli_close($link);
+    clear_url();
+    ?>
 </table>
 </body>
 </html>

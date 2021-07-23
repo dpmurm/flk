@@ -283,11 +283,11 @@ echo '</pre>
 */
 
 // В зависимости от отправленного запроса (нажатой кнопки) дергаем нужные функции
-if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] == "add") {
+if (isset($_POST['flk_upload_submit']) && $_POST['flk_upload_submit'] === "add") {
     flk_protokol_add($link, $arr_xls_heads);
-} elseif (isset($_GET['flk_del_submit']) && $_GET['flk_del_submit'] == "del") {
+} elseif (isset($_GET['flk_del_submit']) && $_GET['flk_del_submit'] === "del") {
     flk_protokol_delete($link);
-} elseif (isset($_GET['flk_checkbox_submit']) && $_GET['flk_checkbox_submit'] == "change") {
+} elseif (isset($_GET['flk_checkbox_submit']) && $_GET['flk_checkbox_submit'] === "change") {
     flk_protokol_update($link);
 } elseif (isset($_GET['rabbit_hole']) && $_GET['rabbit_hole'] == "1") {
     flk_protokol_clear($link);

@@ -56,7 +56,7 @@ function flk_protokol_add($link, $arr_xls_heads)
     }
 
     $tmp_protokol_uid = str_replace('-', '', $date . $period_start . $period_stop);
-    $rnd_protokol_uid = rand(10000, 99999);
+    $rnd_protokol_uid = mt_rand(10000, 99999);
     $protokol_uid = $tmp_protokol_uid . $type_unloading . '-' . $rnd_protokol_uid;
 
     $file_xls = $_FILES['filexls']['name'];
@@ -66,7 +66,7 @@ function flk_protokol_add($link, $arr_xls_heads)
     $file_xml = $_FILES['filexml']['name'];
     $type_file_xml = $_FILES['filexml']['type'];
 
-    if (file_exists($tmp_file_xls) and isset($file_xml) and $type_file_xls == 'application/vnd.ms-excel' and $type_file_xml == 'text/xml') {
+    if (file_exists($tmp_file_xls) and isset($file_xml) and $type_file_xls === 'application/vnd.ms-excel' and $type_file_xml === 'text/xml') {
         // Смотрим, есть ли xls или xml файл с таким же именем в базе, если нет, то можно загружать,
         // если есть, то выдаем ошибку
         $query_check_filename_xls = "SELECT file_name_excel FROM protokol_file WHERE `file_name_excel` = '" . $file_xls . "' LIMIT 1";
@@ -141,8 +141,8 @@ $file_xml - наименование xml файла
 function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_start, $period_stop, $visible, $type_unloading, $vid_object, $protokol_uid, $file_xls, $tmp_file_xls, $file_xml)
 {
     global $good;
-    $good=0;
-    if ($type_unloading==0) {
+    $good = 0;
+    if ($type_unloading == 0) {
 
         // === Получаем вид объекта (ЗУ, ОКС) BEGIN ===
         //Наименование файла xml
@@ -153,7 +153,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_sta
 
             $arr_typeinf_xml = $arr_xml->xpath("//Файл/@ТипИнф");
             $obj_typeinf_xml = $arr_typeinf_xml['0']['ТипИнф'];
-            if (empty($obj_typeinf_xml)) {
+            if ($obj_typeinf_xml === null) {
                 echo '<div class="error">ERROR: Отсутствует атрибут "ТипИнф", проверьте корректность загружаемого XML файла.</div>';
                 return false;
             } else {
@@ -389,7 +389,7 @@ function flk_protokol_parsing($link, $arr_xls_heads, $number, $date, $period_sta
             mysqli_query($link, $query_parse_xls) or die ("Ошибка в запросе: " . $query_parse_xls . "<br>" . mysqli_error($link));
         }
         //Сигнал на окончание загрузки и началу переноса файлов в папку storage
-        $good=1;
+        $good = 1;
         return $good;
     } else {
         echo '<b style="color: red;">ERROR: не все переменные определены!</b>';
@@ -456,4 +456,3 @@ function flk_protokol_clear($link)
     }
 }
 
-?>
