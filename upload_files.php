@@ -67,7 +67,7 @@ function outputFiles($path)
     if (file_exists($path) && is_dir($path)) {
 
         // Search the files in this directory
-        $files = glob($path . "/*.xls");
+        $files = glob($path . "/*.xls*");
         if (count($files) > 0) {
             // Loop through retuned array
             foreach ($files as $file) {
@@ -76,7 +76,8 @@ function outputFiles($path)
                     $file_xls = basename($file);
                     //Вычисление id
                     //$id=preg_replace('/Протокол_ФЛК_/','', basename($file, ".xls"));
-                    $result = preg_match('/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/', basename($file, ".xls"), $match);
+                    //$result = preg_match('/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/', basename($file, ".xlsx"), $match);
+                    $result = preg_match('/[a-z0-9]{8}[a-z0-9]{4}[a-z0-9]{4}[a-z0-9]{4}[a-z0-9]{12}/', basename($file, ".xlsx"), $match);
                     //var_dump( $match);
                     $id = $match[0];
                     //echo '$id='.$id. "<br>";
