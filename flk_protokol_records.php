@@ -5,36 +5,36 @@ require_once("check_cookies.php");
 require_once("functions/fn_misc.php");
 require_once("functions/fn_knlist.php");
 require_once("matching.php");
-
 date_default_timezone_set("Europe/Moscow");
-if (isset($_GET['protokol_id'])) {
+
+/*if (isset($_GET['protokol_id'])) {
     $protokol_id = $_GET['protokol_id']; // Если нет номера отдела берется 0
 } else {
-    $protokol_id = 0;
-}
+    //$protokol_id = 0;
+}*/
 if (isset($_GET['number'])) {
     $number = $_GET['number']; // Если нет номера отдела берется 0
 } else {
-    $number = 0;
+    //$number = 0;
 }
-if (isset($_GET['year'])) {
-    $year = $_GET['year']; // Если нет номера отдела берется 0
+if (isset($_GET['date'])) {
+    $date = $_GET['date']; // Если нет номера отдела берется 0
 } else {
-    $year = 0;
+    //$year = 0;
 }
 if (isset($_GET['period_start'])) {
     $period_start = $_GET['period_start']; // Если нет номера отдела берется 0
 } else {
-    $period_start = 0;
+    //$period_start = 0;
 }
 if (isset($_GET['period_stop'])) {
     $period_stop = $_GET['period_stop']; // Если нет номера отдела берется 0
 } else {
-    $period_stop = 0;
+    //$period_stop = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_GET['protokol_id'])) {
-    $protokol_id = $_SESSION['fpr']['protokol_id'] = $_GET['protokol_id'];
+    $protokol_id = $_GET['protokol_id'];
 } elseif (isset($_SESSION['fpr']['protokol_id'])) {
     $protokol_id = $_SESSION['fpr']['protokol_id'];
 } else {
@@ -42,7 +42,7 @@ if (isset($_GET['protokol_id'])) {
 }
 
 if (isset($_GET['id'])) {
-    $id = $_SESSION['fpr']['id'] = $_GET['id'];
+    $id = $_GET['id'];
 } elseif (isset($_SESSION['fpr']['id'])) {
     $id = $_SESSION['fpr']['id'];
 } else {
@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_GET['sel_rayon'])) {
-    $sel_rayon = $_SESSION['fpr']['sel_rayon'] = $_GET['sel_rayon'];
+    $sel_rayon = $_GET['sel_rayon'];
 } elseif (isset($_SESSION['fpr']['sel_rayon']) && is_numeric($_SESSION['fpr']['sel_rayon'])) {
     $sel_rayon = $_SESSION['fpr']['sel_rayon'];
 } else {
@@ -58,7 +58,7 @@ if (isset($_GET['sel_rayon'])) {
 }
 
 if (isset($_GET['sel_reshenie']) && is_numeric($_GET['sel_reshenie'])) {
-    $sel_reshenie = $_SESSION['fpr']['sel_reshenie'] = $_GET['sel_reshenie'];
+    $sel_reshenie = $_GET['sel_reshenie'];
 } elseif (isset($_SESSION['fpr']['sel_reshenie']) && is_numeric($_SESSION['fpr']['sel_reshenie'])) {
     $sel_reshenie = $_SESSION['fpr']['sel_reshenie'];
 } else {
@@ -66,13 +66,28 @@ if (isset($_GET['sel_reshenie']) && is_numeric($_GET['sel_reshenie'])) {
 }
 
 if (isset($_GET['sel_vid_object'])) {
-    $sel_vid_object = $_SESSION['fpr']['sel_vid_object'] = $_GET['sel_vid_object'];
+    $sel_vid_object = $_GET['sel_vid_object'];
 } elseif (isset($_SESSION['fpr']['sel_vid_object'])) {
     $sel_vid_object = $_SESSION['fpr']['sel_vid_object'];
 } else {
     $sel_vid_object = "-1";
 }
-//echo $sel_vid_object;
+
+if (isset($_GET['sel_vid_error'])) {
+    $sel_vid_error = $_GET['sel_vid_error'];
+} elseif (isset($_SESSION['fpr']['sel_vid_error'])) {
+    $sel_vid_error = $_SESSION['fpr']['sel_vid_error'];
+} else {
+    $sel_vid_error = "NO";
+}
+function convertDateToString ($date_in)
+{
+    $sec_indate = strtotime($date_in);
+    $date_in = date("d.m.Y", $sec_indate);
+    $date_in = $date_in;
+    echo $date_in;
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,11 +105,32 @@ if (isset($_GET['sel_vid_object'])) {
 
 <body>
 
-<h2><font color=red>Протокол передачи сведений в ФНС
-        <!-- <?= $year ?> года номер <?= $number ?> за период с <?= $period_start ?> по <?= $period_stop ?>--></font>
+<h2><font color=red>
+        Протокол передачи сведений в ФНС № <?= $number ?> от <?= convertDateToString($date) ?> за период с <?= convertDateToString($period_start) ?>
+        по <?= convertDateToString($period_stop) ?></font>
 </h2>
 <br> Вернуться к <a href="index.php">протоколам ФЛК</a><br>
+<?php
+//Условия фильтра
+$where_sel = "";
 
+if ($sel_rayon >= 0) {
+    $where_sel .= " AND rl.cad_obj_num LIKE '" . $sel_rayon . ":%'";
+}
+if ($sel_reshenie >= 0) {
+    $where_sel .= " AND ifnull(rn.decision_type,0) = '" . $sel_reshenie . "'";
+}
+if ($sel_vid_object === 'ЗУ') {
+    $where_sel .= " AND rl.type_object = 'Земельный участок'";
+}
+if ($sel_vid_object === 'ОКС') {
+    $where_sel .= " AND (rl.type_object = 'Здание/Сооружение' OR rl.type_object = 'Помещение')";
+}
+if ($sel_vid_error !== "NO") {
+    $where_sel .= "AND rl.error_text='" . $sel_vid_error . "'";
+}
+//Конец фильтра
+?>
 <form method="GET" name="select_rayon" action="?">
     <select class="main" name="sel_rayon">
         <option value="-1">Кад. район не выбран</option>
@@ -128,9 +164,36 @@ if (isset($_GET['sel_vid_object'])) {
         }
         ?>
     </select>
+    <select class="main" name="sel_vid_error">
+        <option value="NO">Вид ошибки не выбран</option>
+        <?php
+        // Список ошибок из конкретного протокола
+        $error_list = mysqli_query($link, "select  distinct 
+                                                        rl.error_text
+                                                    from record_list rl
+                                                        left join record_notes rn on rl.id=rn.record_list_id   
+                                                        left join protokol_file pf on rl.file_name_id=pf.id 
+                                                        left join protokol_export pe  on pf.protokol_id=pe.id
+                                                    where 
+                                                        rl.status!='Прошел флк'
+                                                        and pe.id=$protokol_id
+                                                        
+                                                        order by 1");
+        while ($row = mysqli_fetch_assoc($error_list)) {
+            $arr_error[] = $row['error_text'];
+        }
+        foreach ($arr_error as $error_text) {
+            if (isset($sel_vid_error) && $sel_vid_error == $error_text) {
+                echo '<option value="' . $error_text . '" selected>' . $error_text . '</option>';
+            } else {
+                echo '<option value="' . $error_text . '">' . $error_text . '</option>';
+            }
+        }
+
+        ?>
+    </select>&nbsp;
     <select class="main" name="sel_vid_object">
         <option value="-1">Все объекты</option>
-
         <?php
         // Вид объекта
         foreach ($arr_vid_object as $number_vid_object => $name_vid_object) {
@@ -141,30 +204,19 @@ if (isset($_GET['sel_vid_object'])) {
             }
         }
         ?>
-    </select>&nbsp;
+    </select>
+    <input type="hidden" name="number" value="<?= $number ?>">
+    <input type="hidden" name="date" value="<?= $date ?>">
+    <input type="hidden" name="period_start" value="<?= $period_start ?>">
+    <input type="hidden" name="period_stop" value="<?= $period_stop ?>">
     <button class="button" type="submit">Применить</button>
 </form>
 <br>
-<?php
-//Условия фильтра
-$where_sel = "";
-
-if ($sel_rayon >= 0) {
-    $where_sel .= " AND rl.cad_obj_num LIKE '" . $sel_rayon . ":%'";
-}
-if ($sel_reshenie >= 0) {
-    $where_sel .= " AND ifnull(rn.decision_type,0) = '" . $sel_reshenie . "'";
-}
-if ($sel_vid_object == 'ЗУ') {
-    $where_sel .= " AND rl.type_object = 'Земельный участок'";
-}
-if ($sel_vid_object == 'ОКС') {
-    $where_sel .= " AND (rl.type_object = 'Здание/Сооружение' OR rl.type_object = 'Помещение')";
-}
-//Конец фильтра
-?>
 <!-- === SHOW_KN_FOR_KORR BEGIN === -->
 <?php
+//var_dump($arr_error);
+//echo '<br>'.$protokol_id;
+//echo '<br>'.$where_sel;
 // показываем ссылку на список КН, если наш ip в списке разрешенных
 $ipaddr = $_SERVER['REMOTE_ADDR'];
 if (in_array("$ipaddr", $arr_ip_allow)) {
@@ -243,7 +295,7 @@ order by 2, 4";
 
     mysqli_free_result($result);
     mysqli_close($link);
-    clear_url();
+    //clear_url();
     ?>
 </table>
 </body>

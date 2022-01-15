@@ -12,7 +12,7 @@ require_once("matching.php");
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/table.css">
-    <title>Протоколы ФЛК из ФНС</title>
+    <title>Протоколы импорта данных в ФНС</title>
 </head>
 <body>
 

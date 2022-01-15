@@ -11,7 +11,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Протоколы ФЛК исходящей выгрузки из ЕГРН</title>
+    <title>Протоколы ФЛК исходящей выгрузки</title>
 </head>
 <body>
 
@@ -20,7 +20,7 @@ require_once('matching.php');
 require_once('config.php');
 $title = 'Протоколы ФЛК исходящей выгрузки из ЕГРН';
 $query = 'Select * from protokol_export
-        order by Year desc, date desc
+        order by date desc, number desc
         ';
 ?>
 <div class="flk-export">
@@ -96,6 +96,7 @@ $query = 'Select * from protokol_export
                     <td>
                         <a href="flk_protokol_records_xls.php?protokol_id=<?= $row['id'] ?>&number=<?= $row['number'] ?>&date=<?= $row['date'] ?>&period_start=<?= $row['period_start'] ?>&period_stop=<?= $row['period_stop'] ?>">Скачать
                             в EXCEL</a>
+
                     </td>
                 </tr>
                 <?php
