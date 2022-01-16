@@ -84,7 +84,6 @@ function convertDateToString ($date_in)
 {
     $sec_indate = strtotime($date_in);
     $date_in = date("d.m.Y", $sec_indate);
-    $date_in = $date_in;
     echo $date_in;
 }
 
@@ -205,6 +204,7 @@ if ($sel_vid_error !== "NO") {
         }
         ?>
     </select>
+    <input type="hidden" name="protokol_id" value="<?= $protokol_id ?>">
     <input type="hidden" name="number" value="<?= $number ?>">
     <input type="hidden" name="date" value="<?= $date ?>">
     <input type="hidden" name="period_start" value="<?= $period_start ?>">
@@ -230,7 +230,7 @@ if (isset($_GET['show_kn']) && $_GET['show_kn'] == 1) {
 <!-- === SHOW_KN_FOR_KORR END === -->
 <table width="100%" border="1" cellspacing="0" cellpadding="0">
     <tr>
-        <th></th>
+        <th>Состояние</th>
         <th>№ пп</th>
         <th>Район</th>
         <th>Кадастровый№</th>
