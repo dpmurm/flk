@@ -13,28 +13,28 @@ date_default_timezone_set("Europe/Moscow");
     //$protokol_id = 0;
 }*/
 if (isset($_GET['number'])) {
-    $number = $_GET['number']; // Если нет номера отдела берется 0
+    $number =$_SESSION['fpr']['number']= $_GET['number']; // Если нет номера отдела берется 0
 } else {
-    //$number = 0;
+    $number = $_SESSION['fpr']['number'];
 }
 if (isset($_GET['date'])) {
-    $date = $_GET['date']; // Если нет номера отдела берется 0
+    $date =$_SESSION['fpr']['date']= $_GET['date']; // Если нет номера отдела берется 0
 } else {
-    //$year = 0;
+    $date = $_SESSION['fpr']['date'];
 }
 if (isset($_GET['period_start'])) {
-    $period_start = $_GET['period_start']; // Если нет номера отдела берется 0
+    $period_start =$_SESSION['fpr']['period_start']= $_GET['period_start']; // Если нет номера отдела берется 0
 } else {
-    //$period_start = 0;
+    $period_start = $_SESSION['fpr']['period_start'];
 }
 if (isset($_GET['period_stop'])) {
-    $period_stop = $_GET['period_stop']; // Если нет номера отдела берется 0
+    $period_stop = $_SESSION['fpr']['period_stop']=$_GET['period_stop']; // Если нет номера отдела берется 0
 } else {
-    //$period_stop = 0;
+    $period_stop = $_SESSION['fpr']['period_stop'];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_GET['protokol_id'])) {
-    $protokol_id = $_GET['protokol_id'];
+    $protokol_id = $_SESSION['fpr']['protokol_id'] = $_GET['protokol_id'];
 } elseif (isset($_SESSION['fpr']['protokol_id'])) {
     $protokol_id = $_SESSION['fpr']['protokol_id'];
 } else {
@@ -42,7 +42,7 @@ if (isset($_GET['protokol_id'])) {
 }
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = $_SESSION['fpr']['id'] = $_GET['id'];
 } elseif (isset($_SESSION['fpr']['id'])) {
     $id = $_SESSION['fpr']['id'];
 } else {
@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_GET['sel_rayon'])) {
-    $sel_rayon = $_GET['sel_rayon'];
+    $sel_rayon = $_SESSION['fpr']['sel_rayon'] = $_GET['sel_rayon'];
 } elseif (isset($_SESSION['fpr']['sel_rayon']) && is_numeric($_SESSION['fpr']['sel_rayon'])) {
     $sel_rayon = $_SESSION['fpr']['sel_rayon'];
 } else {
@@ -58,7 +58,7 @@ if (isset($_GET['sel_rayon'])) {
 }
 
 if (isset($_GET['sel_reshenie']) && is_numeric($_GET['sel_reshenie'])) {
-    $sel_reshenie = $_GET['sel_reshenie'];
+    $sel_reshenie = $_SESSION['fpr']['sel_reshenie'] =$_GET['sel_reshenie'];
 } elseif (isset($_SESSION['fpr']['sel_reshenie']) && is_numeric($_SESSION['fpr']['sel_reshenie'])) {
     $sel_reshenie = $_SESSION['fpr']['sel_reshenie'];
 } else {
@@ -66,7 +66,7 @@ if (isset($_GET['sel_reshenie']) && is_numeric($_GET['sel_reshenie'])) {
 }
 
 if (isset($_GET['sel_vid_object'])) {
-    $sel_vid_object = $_GET['sel_vid_object'];
+    $sel_vid_object = $_SESSION['fpr']['sel_vid_object']=$_GET['sel_vid_object'];
 } elseif (isset($_SESSION['fpr']['sel_vid_object'])) {
     $sel_vid_object = $_SESSION['fpr']['sel_vid_object'];
 } else {
@@ -74,7 +74,7 @@ if (isset($_GET['sel_vid_object'])) {
 }
 
 if (isset($_GET['sel_vid_error'])) {
-    $sel_vid_error = $_GET['sel_vid_error'];
+    $sel_vid_error =$_SESSION['fpr']['sel_vid_error']= $_GET['sel_vid_error'];
 } elseif (isset($_SESSION['fpr']['sel_vid_error'])) {
     $sel_vid_error = $_SESSION['fpr']['sel_vid_error'];
 } else {
